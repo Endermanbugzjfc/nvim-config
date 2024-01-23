@@ -30,5 +30,3 @@ if not unix then
 end
 require "plugins"
 
-local ver = vim.version()
-vim.print(string.format("%s.%s.%s", ver.major, ver.minor, ver.patch))
