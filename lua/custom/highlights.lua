@@ -12,7 +12,10 @@ M.override = {
   NvDashAscii = {
     bg = "NONE",
     fg = "black",
-  }
+  },
+  NvDashButtons = {
+    bg = "NONE",
+  },
 }
 
 ---@type HLTable
