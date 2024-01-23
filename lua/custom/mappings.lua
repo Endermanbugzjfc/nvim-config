@@ -18,7 +18,7 @@ M.general = {
     --["<leader>ar"] = { function() require("attempt").run() end },
     ["<leader>ad"] = { function() require("attempt").delete_buf() end },
     --["<leader>al"] = { function() require("attempt").rename_buf() end },
-    ["<leader>al"] = { "Telescope attempt" },
+    ["<leader>al"] = { ":Telescope attempt<CR>" },
 
   },
   v = {
