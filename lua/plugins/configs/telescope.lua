@@ -50,14 +50,7 @@ local options = {
     },
   },
 
-  extensions_list = { "themes", "terms", "ui-select" },
-  extensions = {
-    ["ui-select"] = {
-      require("telescope.themes").get_dropdown {
-        -- even more opts
-      }
-    }
-  }
+  extensions_list = { "themes", "terms" },
 }
 
 return options
