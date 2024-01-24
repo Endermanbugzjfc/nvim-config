@@ -17,8 +17,9 @@ M.general = {
       "formatting",
     },
     -- https://github.com/m-demare/attempt.nvim/#keymaps
-    ["<leader>an"] = { function() require("attempt").new_select() end },
-    ["<leader>ai"] = { function() require("attempt").new_input_ext() end },
+    -- ["<leader>an"] = { function() require("attempt").new_select() end },
+    ["<leader>an"] = { function() require("attempt").new_input_ext() end },
+    -- ["<leader>ai"] = { function() require("attempt").new_input_ext() end },
     ["<leader>ar"] = { function() require("attempt").rename_buf() end },
     --["<leader>ar"] = { function() require("attempt").run() end },
     ["<leader>ad"] = { function() require("attempt").delete_buf() end },
