@@ -28,5 +28,7 @@ if not unix then
   vim.opt.shellquote = '"'
   vim.opt.shellxquote = ""
 end
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 require "plugins"
 
