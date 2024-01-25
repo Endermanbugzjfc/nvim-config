@@ -19,9 +19,11 @@ M.ui = {
         ["INSERT"] = "內卷",
         ["VISUAL"] = "割韭菜",
         ["REPLACE"] = "河蟹",
-        ["V-BLOCK"] = "共產",
+        ["V-BLOCK"] = "誅九族",
+        ["V-LINE"] = "抄家",
         ["COMMAND"] = "送中",
-        ["TERMINAL"] = "國牆",
+        ["TERMINAL"] = "翻牆",
+        ["NTERMINAL"] = "潤",
       })[string.match(modules[1], "%S+%s+%S+%s+(%S+)")]
       if mode ~= nil then
         modules[1] = "%#ST_Mode# " .. mode .. " "
