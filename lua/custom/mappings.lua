@@ -27,6 +27,8 @@ M.general = {
     --["<leader>ac"] = { function() require("attempt").rename_buf() end },
     ["<leader>al"] = { ":Telescope attempt<CR>" },
     ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "(p)ath with double (q)uotes:" },
+    ["<Tab><Tab>"] = { ":Telescope buffers<CR>" },
+    ["<leader>x"] = { ":bd<CR>", "close the current buffer" }
   },
   v = {
     [">"] = { ">gv", "indent"},
