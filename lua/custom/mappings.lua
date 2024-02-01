@@ -8,6 +8,7 @@ local M = {}
 M.general = {
   n = {
     [";"] = { ":", "enter command mode", opts = { nowait = true } },
+    ["q;"] = { "q:", "open command-line window", opts = { nowait = true } },
 
     --  format with conform
     ["<leader>fm"] = {
@@ -25,16 +26,16 @@ M.general = {
     ["<leader>ad"] = { function() require("attempt").delete_buf() end },
     --["<leader>ac"] = { function() require("attempt").rename_buf() end },
     ["<leader>al"] = { ":Telescope attempt<CR>" },
-
-    -- (p)ath with double (q)uotes:
-    ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>' }
+    ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "(p)ath with double (q)uotes:" },
   },
   v = {
     [">"] = { ">gv", "indent"},
   },
+  t = {
+    ["<Esc>"] = { vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true), "Escape terminal mode" },
+  }
 }
 
 -- more keybinds!
---or: map('n', '<leader>al', attempt.open_select) -- use ui.select instead of telescope
 
 return M

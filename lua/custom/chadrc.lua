@@ -14,6 +14,7 @@ M.ui = {
   statusline = {
     theme = "vscode",
     overriden_modules = function (modules)
+      -- https://github.com/NvChad/ui/blob/v2.0/lua/nvchad/statusline/vscode.lua
       local mode = ({
         ["NORMAL"] = "躺平",
         ["INSERT"] = "內卷",
