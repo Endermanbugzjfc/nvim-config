@@ -11,6 +11,17 @@ M.ui = {
   hl_add = highlights.add,
   transparency =  true,
 
+  tabufline = {
+    enabled = false,
+    overriden_modules = function (modules)
+      print(modules[3])
+      modules[3] = string.gsub(modules[3], "%@TbTabClose@%S%S%S%S", "")
+      modules[3] = string.gsub(modules[3], "%#TblineTabNewBtn#%S%S%S%S%S%S%S%S%S%S%S %S%S", "")
+      modules[1] = "" -- Space reserved for Nvtree
+      modules[4] = "" -- Close window
+    end
+  },
+
   statusline = {
     theme = "vscode",
     overriden_modules = function (modules)
@@ -34,12 +45,13 @@ M.ui = {
       if mode ~= nil then
         modules[1] = "%#ST_Mode# " .. mode .. " "
       end
-      
+
       local buffer = vim.api.nvim_get_current_buf()
       local format = vim.api.nvim_buf_get_option(buffer, "fileformat")
       if format == "unix" then
         modules[13] = "LF"
       elseif format == "dos" then
+        -- modules[13] = "󰰍󰈌"
         modules[13] = "CRLF"
       elseif format == "mac" then
         modules[13] = "CR"
