@@ -4,7 +4,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 local lspconfig = require "lspconfig"
 
 -- if you just want default config for the servers then put them in a table
-local servers = { "html", "cssls", "tsserver", "clangd" }
+local servers = { "html", "cssls", "tsserver", "clangd", "intelephense", "gopls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -14,14 +14,14 @@ for _, lsp in ipairs(servers) do
 end
 
 lspconfig.rust_analyzer.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
   ["rust-analyzer"] = {
     ["server"] = {
       ["path"] = "C:/Users/User/.cargo/bin/ra-multiplex.exe",
     },
   },
 }
-lspconfig.gopls.setup {}
-lspconfig.intelephense.setup {}
 
 -- 
 -- lspconfig.pyright.setup { blabla}
