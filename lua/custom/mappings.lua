@@ -4,6 +4,9 @@
 
 ---@type MappingsTable
 local M = {}
+local generate_wrap_operations = function(left, right)
+  return {"<Esc>`<i" .. left .. "<Esc>`>la" .. right .. "<Esc>gv2l", "wrap selection with" .. left .. right }
+end
 
 M.general = {
   n = {
@@ -31,7 +34,14 @@ M.general = {
     ["<leader>x"] = { ":bd<CR>", "close the current buffer" }
   },
   v = {
+    -- https://github.com/jiangmiao/auto-pairs
     [">"] = { ">gv", "indent"},
+    ["("] = generate_wrap_operations("(", ")"),
+    ["{"] = generate_wrap_operations("{", "}"),
+    ["<"] = generate_wrap_operations("<", ">"),
+    ['"'] = generate_wrap_operations('"', '"'),
+    ["'"] = generate_wrap_operations("'", "'"),
+    ["["] = generate_wrap_operations("[", "]"),
   },
   t = {
     ["<Esc>"] = { vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true), "Escape terminal mode" },
