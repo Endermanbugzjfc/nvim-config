@@ -20,6 +20,8 @@ lspconfig.rust_analyzer.setup{
     },
   },
 }
+lspconfig.gopls.setup {}
+lspconfig.intelephense.setup {}
 
 -- 
 -- lspconfig.pyright.setup { blabla}
