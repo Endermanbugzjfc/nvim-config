@@ -5,7 +5,8 @@
 ---@type MappingsTable
 local M = {}
 local generate_wrap_operations = function(left, right)
-  return {"<Esc>`<i" .. left .. "<Esc>`>la" .. right .. "<Esc>gv2l", "wrap selection with" .. left .. right }
+  -- return {"<Esc>`<i" .. left .. "<Esc>`>la" .. right .. "<Esc>gv2l", "wrap selection with" .. left .. right }
+  return {"<Esc>`<i <Esc>r" .. left .. "<Esc>`>la" .. right .. "<Esc>gv2l", "wrap selection with" .. left .. right }
 end
 
 M.general = {
@@ -37,7 +38,7 @@ M.general = {
     -- https://github.com/jiangmiao/auto-pairs
     [">"] = { ">gv", "indent"},
     ["("] = generate_wrap_operations("(", ")"),
-    ["{"] = generate_wrap_operations("{", "}"), -- Sometimes breaks cuz of autoindent
+    ["{"] = generate_wrap_operations("{", "}"),
     ["<"] = generate_wrap_operations("<", ">"),
     ['"'] = generate_wrap_operations('"', '"'),
     ["'"] = generate_wrap_operations("'", "'"),
