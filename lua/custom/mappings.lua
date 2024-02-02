@@ -31,9 +31,12 @@ M.general = {
     ["<leader>ad"] = { function() require("attempt").delete_buf() end, "Delete scratch file" },
     --["<leader>ac"] = { function() require("attempt").rename_buf() end },
     ["<leader>al"] = { ":Telescope attempt<CR>", "List scratch files" },
-    ["gr"] = { ":Telescope lsp_references<CR>", "Goto references" }, -- Imo location list only suits diagnostics, rather than refs.
     ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "Path with double (q)uotes" },
     ["<leader>x"] = { ":bd<CR>", "Close this buffer" },
+
+    -- Imo location list only suits diagnostics:
+    ["gr"] = { ":Telescope lsp_references<CR>", "Goto references" },
+    ["gd"] = { ":Telescope lsp_definitions<CR>", "Goto definitions" },
   },
   v = {
     -- https://github.com/jiangmiao/auto-pairs
