@@ -38,12 +38,12 @@ M.general = {
   v = {
     -- https://github.com/jiangmiao/auto-pairs
     [">"] = { ">gv", "indent"},
-    ["("] = generate_wrap_operations("(", ")"),
-    ["{"] = generate_wrap_operations("{", "}"),
-    ["<"] = generate_wrap_operations("<", ">"),
-    ['"'] = generate_wrap_operations('"', '"'),
-    ["'"] = generate_wrap_operations("'", "'"),
-    ["["] = generate_wrap_operations("[", "]"),
+    ["<leader>("] = generate_wrap_operations("(", ")"),
+    ["<leader>{"] = generate_wrap_operations("{", "}"),
+    ["<leader><"] = generate_wrap_operations("<", ">"),
+    ['<leader>"'] = generate_wrap_operations('"', '"'),
+    ["<leader>'"] = generate_wrap_operations("'", "'"),
+    ["<leader>["] = generate_wrap_operations("[", "]"),
   },
   t = {
     ["<Esc>"] = { vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true), "Escape terminal mode" },
