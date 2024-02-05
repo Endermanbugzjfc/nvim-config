@@ -58,11 +58,40 @@ local plugins = {
   },
 
   {
-    "m-demare/attempt.nvim",
+    "m-demare/attempt.nvim", -- Scratch files manager.
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
     config = function()
-      local attempt = require("attempt")
-      attempt.setup()
+      require("attempt").setup()
       require("telescope").load_extension "attempt"
+    end,
+  },
+
+  -- {
+  --   "ggandor/leap.nvim", -- Fast navigation within visible area.
+  --   event = "BufEnter",
+  --   dependencies = {
+  --     "tpope/vim-repeat",
+  --   },
+  --   config = function()
+  --     require("leap").add_default_mappings()
+  --   end,
+  -- },
+
+  {
+    'echasnovski/mini.nvim', -- The "Swiss Army knife".
+    event = "BufEnter",
+    version = '*',
+    config  = function()
+        require("mini.cursorword").setup()
+        require("mini.jump2d").setup() -- Key: <CR>
+        -- require("mini.map").setup()
+        require("mini.move").setup()
+        -- require("mini.sessions").setup()
+        require("mini.splitjoin").setup() -- Key: gS
+        require("mini.surround").setup() -- Key: s+prefix
+        require("mini.trailspace").setup()
     end,
   },
 
