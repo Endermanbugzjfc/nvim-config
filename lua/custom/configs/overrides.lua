@@ -37,6 +37,10 @@ M.mason = {
     -- c/cpp stuff
     "clangd",
     "clang-format",
+
+    "gopls",
+    "intelephense",
+    "rust-analyzer",
   },
 }
 
@@ -54,6 +58,19 @@ M.nvimtree = {
       },
     },
   },
+}
+
+M.cmp = {
+    completion = {
+        completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
+    },
+}
+
+M.telescope = {
+    defaults = {
+        -- prompt_prefix = " 揾笨 ",
+        file_ignore_patterns = { "node_modules", ".git" },
+    },
 }
 
 return M

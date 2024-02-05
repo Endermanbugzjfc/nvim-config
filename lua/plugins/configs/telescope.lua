@@ -11,7 +11,6 @@ local options = {
       "--smart-case",
     },
     prompt_prefix = "   ",
-    -- prompt_prefix = " 揾笨 ",
     selection_caret = "  ",
     entry_prefix = "  ",
     initial_mode = "insert",
