@@ -33,7 +33,7 @@ return {
     elseif format == "mac" then
       modules[13] = "CR"
     else
-      modules[13] = "NMSL"
+      modules[13] = "DLLM"
     end
   end,
 }
