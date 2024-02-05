@@ -59,9 +59,7 @@ local plugins = {
 
   {
     "m-demare/attempt.nvim", -- Scratch files manager.
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
+    dependencies = {"nvim-lua/plenary.nvim" },
     config = function()
       require("attempt").setup()
       require("telescope").load_extension "attempt"
@@ -97,9 +95,14 @@ local plugins = {
     end,
   },
 
-  { "tpope/vim-sleuth", event = "BufEnter" },
-  { "yorickpeterse/nvim-window" },
-  -- { "tpope/vim-abolish", cmd = { "Subvert" } },
+  { "tpope/vim-sleuth", event = "BufEnter" }, -- Tab width adaptation.
+  { "yorickpeterse/nvim-window" }, -- Jump between windows.
+
+  {
+    "tpope/vim-abolish", -- Advanced substitute.
+    event = "BufEnter",
+    dependencies = { "markonm/traces.vim", event = "BufEnter" },
+  },
   -- { "haya14busa/incsearch.vim" },
 
   -- To make a plugin not be loaded
