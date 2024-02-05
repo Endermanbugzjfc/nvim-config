@@ -80,11 +80,13 @@ local plugins = {
   -- },
 
   {
-    'echasnovski/mini.nvim', -- The "Swiss Army knife".
+    "echasnovski/mini.nvim", -- The "Swiss Army knife".
     event = "BufEnter",
     version = '*',
     config  = function()
         require("mini.cursorword").setup()
+        -- require("mini.jump").setup({ mappings = { repeat_jump = "-" } })
+        require("mini.jump").setup()
         require("mini.jump2d").setup() -- Key: <CR>
         -- require("mini.map").setup()
         require("mini.move").setup()
@@ -94,6 +96,11 @@ local plugins = {
         require("mini.trailspace").setup()
     end,
   },
+
+  { "tpope/vim-sleuth", event = "BufEnter" },
+  { "yorickpeterse/nvim-window" },
+  -- { "tpope/vim-abolish", cmd = { "Subvert" } },
+  -- { "haya14busa/incsearch.vim" },
 
   -- To make a plugin not be loaded
   -- {

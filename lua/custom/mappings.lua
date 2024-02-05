@@ -38,6 +38,9 @@ M.general = {
     -- https://github.com/lewis6991/gitsigns.nvim/blob/2c2463dbd82eddd7dbab881c3a62cfbfbe3c67ae/lua/gitsigns/actions.lua#L377
     ["<leader>gs"] = { function() require("gitsigns").stage_hunk() end, "Stage hunk" },
     ["<leader>gS"] = { function() require("gitsigns").undo_stage_hunk() end, "Undo last stage" },
+
+    -- https://github.com/yorickpeterse/nvim-window#lazynvim
+    ["<leader>wj"] = { "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
   },
   v = {
     [">"] = { ">gv", "indent"},
