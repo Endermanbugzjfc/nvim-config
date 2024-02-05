@@ -1,4 +1,13 @@
 ![image](https://github.com/Endermanbugzjfc/nvim-config/assets/53002741/bb0f391f-a213-403e-a1c8-8e25d8b2a1c0)
+<p align=center>
+  <a href=https://github.com/NvChad/NvChad#plugins-list>
+    <img src=https://img.shields.io/badge/total_plugins-29-green?style=for-the-badge title="Total plugins (29)">
+  </a>
+  <a href=lua/custom>
+    <img src="https://img.shields.io/badge/custom_plugins-2-blue?style=for-the-badge" title="Custom plugins (2)">
+  </a>
+</p>
+
 # Small talks on NvChad
 As more and more Vim presets emerge, many are prone to be spoiled for choices on their first glimpse at this whole new world. Nevertheless, every coin has two sides and each Vim setup has its pros and cons. Therefore, I would like to expose some shortcomings of NvChad that I have run into.
 ## 1. The nightmare of configure
