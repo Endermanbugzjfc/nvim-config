@@ -87,7 +87,7 @@ local plugins = {
         require("mini.jump").setup()
         require("mini.jump2d").setup() -- Key: <CR>
         -- require("mini.map").setup()
-        require("mini.move").setup()
+        -- require("mini.move").setup()
         -- require("mini.sessions").setup()
         require("mini.splitjoin").setup() -- Key: gS
         require("mini.surround").setup() -- Key: s+prefix
@@ -103,6 +103,13 @@ local plugins = {
     event = "BufEnter",
     dependencies = { "markonm/traces.vim", event = "BufEnter" },
   },
+
+  {
+    "nvim-telescope/telescope-ui-select.nvim", -- UI for LSP code action.
+    config = function()
+      require("telescope").load_extension "ui-select"
+    end,
+  }
   -- { "haya14busa/incsearch.vim" },
 
   -- To make a plugin not be loaded

@@ -61,16 +61,20 @@ M.nvimtree = {
 }
 
 M.cmp = {
-    completion = {
-        completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
-    },
+  completion = {
+    completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
+  },
 }
 
 M.telescope = {
-    defaults = {
-        -- prompt_prefix = " 揾笨 ",
-        file_ignore_patterns = { "node_modules", ".git" },
-    },
+  defaults = {
+    -- prompt_prefix = " 揾笨 ",
+    file_ignore_patterns = { "node_modules", ".git" },
+  },
+  extensions_list = { "themes", "terms", "ui-select" },
+  extensions = {
+    ["ui-select"] = {},
+  },
 }
 
 return M

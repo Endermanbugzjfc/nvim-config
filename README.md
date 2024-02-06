@@ -1,10 +1,10 @@
 ![image](https://github.com/Endermanbugzjfc/nvim-config/assets/53002741/bb0f391f-a213-403e-a1c8-8e25d8b2a1c0)
 <p align=center>
   <a href=https://github.com/NvChad/NvChad#plugins-list>
-    <img src=https://img.shields.io/badge/total_plugins-33-green?style=for-the-badge title="Total plugins (33)">
+    <img src=https://img.shields.io/badge/total_plugins-34-green?style=for-the-badge title="Total plugins (34)">
   </a>
   <a href=lua/custom>
-    <img src="https://img.shields.io/badge/custom_plugins-5-blue?style=for-the-badge" title="Custom plugins (5)"/
+    <img src="https://img.shields.io/badge/custom_plugins-6-blue?style=for-the-badge" title="Custom plugins (6)"/
   </a>
 </p>
 
@@ -22,3 +22,4 @@ There is no doubt that the DIY process has provided me with a lot of fun. Howeve
 - [tpope/vim-sleuth](https://github.com/tpope/vim-sleuth) *Tab width adaptation.*
 - [tpope/vim-abolish](https://github.com/tpope/vim-abolish) *Advanced substitute.*
   - [markonm/traces.vim](https://github.com/markonm/traces.vim) *Highlight and preview.*
+- [nvim-telescope/telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim) *UI for LSP code action.*
