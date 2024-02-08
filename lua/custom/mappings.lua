@@ -30,6 +30,7 @@ M.general = {
     ["<leader>fZ"] = { ":Telescope live_grep<CR>", "Live grep" },
     ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "Path with double (q)uotes" },
     ["<leader>x"] = { ":bd<CR>", "Close this buffer" },
+    ["<leader>tw"] = { ":set wrap!<CR>", "Toggle word wrap" },
 
     -- Imo location list only suits diagnostics:
     ["gr"] = { ":Telescope lsp_references<CR>", "Goto references" },

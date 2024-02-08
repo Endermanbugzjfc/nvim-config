@@ -75,6 +75,16 @@ M.telescope = {
   extensions = {
     ["ui-select"] = {},
   },
+  pickers = {
+    find_files = {
+      mappings = {
+        n = {
+          ["<M-h>"] = "select_horizontal",
+          ["<M-v>"] = "select_vertical", -- <C-v> not working on Windows.
+        },
+      },
+    },
+  },
 }
 
 return M

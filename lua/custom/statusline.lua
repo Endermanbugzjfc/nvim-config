@@ -3,8 +3,8 @@ return {
   overriden_modules = function (modules)
     modules[10] = "" -- Encoding
     modules[11] = "" -- Syntax
-    modules[12] = "" -- LSP
-    modules[13] = "" -- Folder
+    modules[12] = "" -- Attached LSP
+    modules[13] = "" -- Working directory
 
     -- https://github.com/NvChad/ui/blob/v2.0/lua/nvchad/statusline/vscode.lua
     local mode = ({
@@ -24,6 +24,19 @@ return {
     end
 
     local buffer = vim.api.nvim_get_current_buf()
+
+    -- local dirty = " "
+    -- if vim.bo[buffer].readonly then
+    --   dirty = "󰌾"
+    -- end
+    -- if vim.api.nvim_buf_get_option(buffer, "modified") then
+    --   dirty = "󱗜"
+    -- end
+    -- modules[4] = dirty
+
+    -- local col = 1 + vim.api.nvim_win_get_cursor(0)[2]
+    -- modules[5] = "" .. col
+
     local format = vim.api.nvim_buf_get_option(buffer, "fileformat")
     if format == "unix" then
       modules[13] = "LF"
