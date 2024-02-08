@@ -13,15 +13,29 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-lspconfig.rust_analyzer.setup{
-  on_attach = on_attach,
-  capabilities = capabilities,
-  ["rust-analyzer"] = {
-    ["server"] = {
-      ["path"] = "C:/Users/User/.cargo/bin/ra-multiplex.exe",
+for lsp, config in pairs({
+  rust_analyzer = {
+    ["rust-analyzer"] = {
+      server = {
+        path = "C:/Users/User/.cargo/bin/ra-multiplex.exe",
+      },
     },
   },
-}
-
--- 
+  grammarly = {
+    grammarly = {
+      config = {
+        ["documentDialect"] = "british",
+        ["documentDomain"] = "academic",
+      },
+      ["suggestionCategories"] = {
+        vocabulary = "off",
+      },
+    },
+  },
+}) do
+  config.on_attach = on_attach
+  config.capabilities = capabilities
+  lspconfig[lsp].setup(config)
+end
+--
 -- lspconfig.pyright.setup { blabla}
