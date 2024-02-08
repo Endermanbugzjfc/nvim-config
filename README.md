@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/custom_plugins-6-blue?style=for-the-badge" title="Custom plugins (6)">
   </a>
   <a href="#which-theme-am-i-using-why-does-the-whole-interface-look-so-dull">
-    <img src="https://img.shields.io/badge/works_on-my_machine-gold?style=for-the-badge" title="Never gonna give you up~~">
+    <img src="https://img.shields.io/badge/works_on-my_machine-gold?style=for-the-badge" title="Made in China">
   </a>
   </br>
   <a href="https://github.com/SOF3/nvim-config">
@@ -27,40 +27,44 @@ many are prone to be spoiled for choices on their first glimpse at this whole ne
 Nevertheless, every coin has two sides and each Vim setup has its pros and cons.
 Therefore, I would like to expose some shortcomings of NvChad that I have run into.
 ### 1. The nightmare of configure
-There is no doubt that the DIY process has provided me with a lot of fun. However, alongside many troubles.
-- Built-in systems, such as Tabufline and Statusline, have produced a certain difficulty for customisation as you can only work with [stringified modules]().
-- Lack of caveats and guides in the official doc, especially for the installation of LSP. The tiniest step can cause an entire butterfly effect. I still recall the 2 hours I spent trying to figure out that my LSP malfunctions because I forgot to make them inherit the default config.
+There is no doubt that the DIY process has provided me with a lot of fun. However, many troubles appeared.
+- Built-in systems, such as Tabufline and Statusline, have produced a certain difficulty for customisation as you can only work with [stringified modules](https://github.com/Endermanbugzjfc/nvim-config/blob/c88b4f48b6f3f522c8a83b77a544771867709834/lua/custom/statusline.lua#L20).
+- Lack of caveats and guides in the official doc, especially for the installation of LSP. The tiniest step can cause an entire butterfly effect. I still recall the 2 hours I spent trying to figure out my LSP malfunctions because I forgot to make them inherit the default config.
 
-*On the second thought, it probably takes akin length of time to configure pure Nvim or other presets.*
+*On second thought, it probably takes akin length of time to configure pure Nvim or other presets.*
 ### 2. Lazy.nvim doesn't fix Mojang code
 I greatly appreciate that Lazy (the plugin manager) has helped the performance by leaps.
 However, there are certain plugins that just can't follow the pace of me:
 - nvim-tree.lua
 
 # Which theme am I using? Why does the whole interface look so dull?
-I am using GitHub Light as the colour scheme and a heavily stripped VSCode statusline.
-In fact, it is not really as lackluster for me as the above screenshot has shown,
-thanks to me setting 80% opacity of Windows Terminal,
-with acrylic material disabled, allowing me to read the documentations (or perhaps, loafing around) alongside writing code as well as 
+GitHub Light is my all-day colour scheme alongside a heavily stripped VSCode statusline.
+It is not really as lacklustre for me as the above screenshot has shown.
+Thanks to my 80% opacity of Windows Terminal,
+with acrylic material disabled, I can read the documentation (or perhaps, loaf around) in the meantime of writing code.
 
-Moreover, it is an attempt is to boost my productvity by minimising the distractions, with reference to this video:
+Moreover, it is an attempt to boost my productivity by minimising the distractions, concerning this video:
 ```
 https://youtu.be/_hnuEdrM-a0
 ```
 *go copy the link urself don't accuse me rickroll'in*
-This is also why there are so much stuff commented out for the statusline modules,
+
+This is also why there is so much stuff commented out for the statusline modules,
 such as the [column number](https://github.com/Endermanbugzjfc/nvim-config/blob/c88b4f48b6f3f522c8a83b77a544771867709834/lua/custom/statusline.lua#L38), which updates too often.
 
 In case you are curious, my Windows Terminal colour scheme is One Half Light,
-with white mapped to [#A8A8A8](https://imagecolorpicker.com/color-code/a8a8a8) /
-[#CFCFCF](https://imagecolorpicker.com/color-code/cfcfcf) and had the font be
-[CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#cascadia-code).
-*[watis a nerd font¿](https://www.nerdfonts.com/)*
+with dimmed white / bright white mapped to
+[![#A8A8A8](https://img.shields.io/badge/%20%23A8A8A8-A8A8A8)](https://imagecolorpicker.com/color-code/a8a8a8) /
+[![#CFCFCF](https://img.shields.io/badge/%20%23CFCFCF-CFCFCF)](https://imagecolorpicker.com/color-code/cfcfcf)
+and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#cascadia-code).
+
+*watis a nerd font¿ https://www.nerdfonts.com/*
 
 # Prerequisites
 - Nvim installed as an [AppImage](https://github.com/vim/vim-appimage) since the one on APT is outdated.
 - [`fd`](https://github.com/sharkdp/fd) or you gotta spend 69 hours trying to figure out why Telescope hates you.
 - [`live_grep`](https://github.com/BurntSushi/ripgrep) in which I just treat it as the project-level search tool.
+- NodeJS v16 (use NVM to switch version), cannot get Grammarly LSP 0.0.4 work on high Node versions.
 - **Possess a seasoned level of skill to exit Vim.**
 
 # Custom plugins
