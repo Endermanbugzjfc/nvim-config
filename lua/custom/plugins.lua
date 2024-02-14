@@ -1,5 +1,17 @@
 local overrides = require("custom.configs.overrides")
 
+local data_path = vim.fn.stdpath("data")
+
+-- https://github.com/codota/tabnine-nvim?tab=readme-ov-file#windows
+-- Get platform dependant build script
+local function tabnine_build_path()
+  if vim.loop.os_uname().sysname == "Windows_NT" then
+    return "PowerShell.exe -file .\\dl_binaries.ps1"
+  else
+    return "./dl_binaries.sh"
+  end
+end
+
 ---@type NvPluginSpec[]
 local plugins = {
 
@@ -109,7 +121,25 @@ local plugins = {
     config = function()
       require("telescope").load_extension "ui-select"
     end,
-  }
+  },
+
+  {
+    "codota/tabnine-nvim",
+    build = tabnine_build_path(),
+    event = "InsertEnter",
+    config = function()
+      require("tabnine").setup({
+        disable_auto_comment = false,
+        accept_keymap = "<C-CR>",
+        dismiss_keymap = "<M-\\>",
+        debounce_ms = 800,
+        suggestion_color = { gui = "#008000", cterm = 1 },
+        exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+        log_file_path = data_path .. "/tabnine.log" , -- absolute path to Tabnine log file
+      })
+    end,
+  },
+
   -- { "haya14busa/incsearch.vim" },
 
   -- To make a plugin not be loaded
