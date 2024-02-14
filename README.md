@@ -79,5 +79,5 @@ and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#
 - [tpope/vim-abolish](https://github.com/tpope/vim-abolish) *Advanced substitute.*
   - [markonm/traces.vim](https://github.com/markonm/traces.vim) *Highlight and preview.*
 - [nvim-telescope/telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim) *UI for LSP code action.*
-- [codota/tabnine-nvim](https://github.com/codota/tabnine-nvim) *Copilot alternative.*
+- [tzachar/cmp-tabnine](https://github.com/tzachar/cmp-tabnine) *GitHub Copilot alternative.*
 

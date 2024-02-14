@@ -60,8 +60,7 @@ M.nvimtree = {
   },
 }
 
-local cmp = require "cmp"
-
+local cmp = require("cmp")
 M.cmp = {
   completion = {
     completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
@@ -71,6 +70,14 @@ M.cmp = {
       behavior = cmp.ConfirmBehavior.Insert,
       select = true,
     },
+  },
+  sources = {
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "buffer" },
+    { name = "nvim_lua" },
+    { name = "path" },
+    { name = "cmp_tabnine" },
   },
 }
 
