@@ -1,10 +1,17 @@
-![image](https://github.com/Endermanbugzjfc/nvim-config/assets/53002741/bb0f391f-a213-403e-a1c8-8e25d8b2a1c0)
+```bash
+docker run -w /root -it --rm alpine:latest sh -uelic '
+  apk add git nodejs neovim ripgrep build-base wget --update
+  git clone https://github.com/Endermanbugzjfc/nvim-config ~/.config/nvim
+  nvim # prerequisites below are not included!
+  '
+```
+![撚 𨶙 捻 년 ねん ㄋㄧㄢˇ](https://github.com/Endermanbugzjfc/nvim-config/assets/53002741/bb0f391f-a213-403e-a1c8-8e25d8b2a1c0)
 <p align=center>
   <a href="https://github.com/NvChad/NvChad#plugins-list">
-    <img src="https://img.shields.io/badge/total_plugins-34-green?style=for-the-badge" title="Total plugins (34)">
+    <img src="https://img.shields.io/badge/total_plugins-35-green?style=for-the-badge" title="Total plugins (35)">
   </a>
   <a href="lua/custom">
-    <img src="https://img.shields.io/badge/custom_plugins-6-blue?style=for-the-badge" title="Custom plugins (6)">
+    <img src="https://img.shields.io/badge/custom_plugins-7-blue?style=for-the-badge" title="Custom plugins (7)">
   </a>
   <a href="#which-theme-am-i-using-why-does-the-whole-interface-look-so-dull">
     <img src="https://img.shields.io/badge/works_on-my_machine-gold?style=for-the-badge" title="Made in China">
@@ -58,13 +65,11 @@ with dimmed white / bright white mapped to
 [![#CFCFCF](https://img.shields.io/badge/%20%23CFCFCF-CFCFCF)](https://imagecolorpicker.com/color-code/cfcfcf)
 and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#cascadia-code).
 
-*watis a nerd font¿ https://www.nerdfonts.com/*
-
 # Prerequisites
 - Nvim installed as an [AppImage](https://github.com/vim/vim-appimage) since the one on APT is outdated.
 - [`fd`](https://github.com/sharkdp/fd) or you gotta spend 69 hours trying to figure out why Telescope hates you.
-- [`live_grep`](https://github.com/BurntSushi/ripgrep) in which I just treat it as the project-level search tool.
-- NodeJS v16 (use NVM to switch version), cannot get Grammarly LSP 0.0.4 work on high Node versions.
+- [`ripgrep`](https://github.com/BurntSushi/ripgrep) in which I just treat it as the project-level search tool.
+<!-- - NodeJS v16 (use NVM to switch version), cannot get Grammarly LSP 0.0.4 work on high Node versions. -->
 - **Possess a seasoned level of skill to exit Vim.**
 
 # Custom plugins
@@ -74,4 +79,5 @@ and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#
 - [tpope/vim-abolish](https://github.com/tpope/vim-abolish) *Advanced substitute.*
   - [markonm/traces.vim](https://github.com/markonm/traces.vim) *Highlight and preview.*
 - [nvim-telescope/telescope-ui-select.nvim](https://github.com/nvim-telescope/telescope-ui-select.nvim) *UI for LSP code action.*
+- [codota/tabnine-nvim](https://github.com/codota/tabnine-nvim) *Copilot alternative.*
 

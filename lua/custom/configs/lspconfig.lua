@@ -4,7 +4,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 local lspconfig = require "lspconfig"
 
 -- if you just want default config for the servers then put them in a table
-local servers = { "html", "cssls", "tsserver", "clangd", "intelephense", "gopls" }
+local servers = { "html", "cssls", "tsserver", "clangd", "intelephense", "gopls", "vimls" }
 
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -21,17 +21,17 @@ for lsp, config in pairs({
       },
     },
   },
-  grammarly = {
-    grammarly = {
-      config = {
-        ["documentDialect"] = "british",
-        ["documentDomain"] = "academic",
-      },
-      ["suggestionCategories"] = {
-        vocabulary = "off",
-      },
-    },
-  },
+  -- grammarly = {
+  --   grammarly = {
+  --     config = { -- TODO: try client ID
+  --       ["documentDialect"] = "british",
+  --       ["documentDomain"] = "academic",
+  --     },
+  --     ["suggestionCategories"] = {
+  --       vocabulary = "off",
+  --     },
+  --   },
+  -- },
 }) do
   config.on_attach = on_attach
   config.capabilities = capabilities

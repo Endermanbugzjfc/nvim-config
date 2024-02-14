@@ -6,6 +6,12 @@
 --   command = "tabdo wincmd =",
 -- })
 
+-- https://github.com/f40a3204/nvim/blob/cbb8c3cac259e26f5c77cb223087fb0a3ab9d36b/init.lua#L10-L13
+vim.api.nvim_exec([[
+  au BufEnter * setlocal cursorline
+  au BufLeave * setlocal nocursorline
+]], false) -- https://github.com/SOF3/nvim-config/blob/0cecba2a63712f33755befe3fe3d2518a64cffd0/config/init.vim#L10
+
 local unix = vim.fn.has "unix" == 1
 
 vim.opt.clipboard = ""
@@ -18,6 +24,8 @@ if not unix then
 end
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
+-- vim.opt.spell = true -- Useless and wastes mapping slots.
+-- vim.opt.spelllang = "en_gb"
 
 -- https://nvchad.com/docs/config/snippets
 vim.g.lua_snippets_path = vim.fn.stdpath "config" .. "/lua/custom/lua_snippets"
