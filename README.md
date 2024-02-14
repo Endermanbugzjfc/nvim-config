@@ -10,7 +10,7 @@ docker run -w /root -it --rm alpine:latest sh -uelic '
   <a href="https://github.com/NvChad/NvChad#plugins-list">
     <img src="https://img.shields.io/badge/total_plugins-35-green?style=for-the-badge" title="Total plugins (35)">
   </a>
-  <a href="lua/custom">
+  <a href="#custom-plugins">
     <img src="https://img.shields.io/badge/custom_plugins-7-blue?style=for-the-badge" title="Custom plugins (7)">
   </a>
   <a href="#which-theme-am-i-using-why-does-the-whole-interface-look-so-dull">
