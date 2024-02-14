@@ -48,10 +48,5 @@ return {
     else
       modules[13] = "DLLM"
     end
-
-    -- local tabnine = require("tabnine.status").status()
-    -- if tabnine.loading then
-    --   modules[6] = "TABNINE INACTIVE"
-    -- end
   end,
 }
