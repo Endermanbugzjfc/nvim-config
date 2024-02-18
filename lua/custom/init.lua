@@ -6,13 +6,17 @@
 --   command = "tabdo wincmd =",
 -- })
 
+local unix = vim.fn.has "unix" == 1
+
 -- https://github.com/f40a3204/nvim/blob/cbb8c3cac259e26f5c77cb223087fb0a3ab9d36b/init.lua#L10-L13
 vim.api.nvim_exec([[
   au BufEnter * setlocal cursorline
   au BufLeave * setlocal nocursorline
 ]], false) -- https://github.com/SOF3/nvim-config/blob/0cecba2a63712f33755befe3fe3d2518a64cffd0/config/init.vim#L10
 
-local unix = vim.fn.has "unix" == 1
+-- https://github.com/SOF3/nvim-config/blob/0cecba2a63712f33755befe3fe3d2518a64cffd0/config/init.vim#L23
+vim.opt.autoread = true
+vim.opt.autowrite = true
 
 vim.opt.clipboard = ""
 if not unix then
@@ -24,6 +28,7 @@ if not unix then
 end
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
+vim.opt.rnu = true
 -- vim.opt.spell = true -- Useless and wastes mapping slots.
 -- vim.opt.spelllang = "en_gb"
 

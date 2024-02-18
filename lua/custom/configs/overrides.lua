@@ -63,10 +63,12 @@ M.nvimtree = {
 local cmp = require("cmp")
 M.cmp = {
   completion = {
+    preselect = cmp.PreselectMode.None,
     completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
   },
-  mappings = {
-    ["<C-CR>"] = cmp.mapping.confirm { -- Otherwise, cannot open a new line when completion popup is opened.
+  mapping = {
+    ["<CR>"] = cmp.config.disable,
+    ["\\"] = cmp.mapping.confirm { -- Otherwise, cannot open a new line when completion popup is opened.
       behavior = cmp.ConfirmBehavior.Insert,
       select = true,
     },

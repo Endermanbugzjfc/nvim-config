@@ -7,8 +7,6 @@ local M = {}
 
 M.general = {
   n = {
-    [";"] = { ":", "enter command mode", opts = { nowait = true } },
-    ["q;"] = { "q:", "open command-line window", opts = { nowait = true } },
     ["Y"] = { "yy" },
 
     --  format with conform
@@ -51,6 +49,14 @@ M.general = {
     ["<Esc>"] = { vim.api.nvim_replace_termcodes("<C-\\><C-N>", true, true, true), "Escape terminal mode" },
   }
 }
+
+
+local function vn(k, v)
+  M.general.n[k] = v
+  M.general.v[k] = v
+end
+vn(";", { ":", "enter command mode", opts = { nowait = true } })
+vn("q;", { "q:", "open command-line window", opts = { nowait = true } })
 
 -- more keybinds!
 
