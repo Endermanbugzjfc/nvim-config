@@ -104,4 +104,10 @@ M.telescope = {
   },
 }
 
+M.gitsigns = {
+  signs = {
+    delete = { text = "" }, -- nf-fa-eraser
+  },
+}
+
 return M

@@ -27,15 +27,15 @@ return {
 
     -- local dirty = " "
     -- if vim.bo[buffer].readonly then
-    --   dirty = "󰌾"
+    --   dirty = "󰌾" -- nf-md-lock
     -- end
     -- if vim.api.nvim_buf_get_option(buffer, "modified") then
-    --   dirty = "󱗜"
+    --   dirty = "󱗜" -- nf-md-circle_box
     -- end
     -- modules[4] = dirty
 
     -- local col = 1 + vim.api.nvim_win_get_cursor(0)[2]
-    -- modules[5] = "" .. col
+    -- modules[5] = "" .. col -- nf-seti-play_arrow
 
     local format = vim.api.nvim_buf_get_option(buffer, "fileformat")
     if format == "unix" then

@@ -46,6 +46,11 @@ local plugins = {
     opts = overrides.telescope,
   },
 
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = overrides.gitsigns,
+  },
+
   -- Install a plugin
   {
     "max397574/better-escape.nvim",
