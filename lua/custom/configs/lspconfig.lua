@@ -15,23 +15,21 @@ end
 
 for lsp, config in pairs({
   rust_analyzer = {
-    ["rust-analyzer"] = {
-      server = {
-        path = "C:/Users/User/.cargo/bin/ra-multiplex.exe",
+    cmd = { "C:/Users/User/.cargo/bin/ra-multiplex.exe" },
+  },
+  grammarly = {
+    settings = {
+      ["grammarly"] = {
+        config = {
+          ["documentDialect"] = "british",
+          ["documentDomain"] = "academic",
+        },
+        ["suggestionCategories"] = {
+          vocabulary = "off",
+        },
       },
     },
   },
-  -- grammarly = {
-  --   grammarly = {
-  --     config = { -- TODO: try client ID
-  --       ["documentDialect"] = "british",
-  --       ["documentDomain"] = "academic",
-  --     },
-  --     ["suggestionCategories"] = {
-  --       vocabulary = "off",
-  --     },
-  --   },
-  -- },
 }) do
   config.on_attach = on_attach
   config.capabilities = capabilities

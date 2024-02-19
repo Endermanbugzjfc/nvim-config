@@ -61,8 +61,10 @@ such as the [column number](https://github.com/Endermanbugzjfc/nvim-config/blob/
 
 In case you are curious, my Windows Terminal colour scheme is One Half Light,
 with dimmed white / bright white mapped to
-[![#A8A8A8](https://img.shields.io/badge/%20%23A8A8A8-A8A8A8)](https://imagecolorpicker.com/color-code/a8a8a8) /
-[![#CFCFCF](https://img.shields.io/badge/%20%23CFCFCF-CFCFCF)](https://imagecolorpicker.com/color-code/cfcfcf)
+[![Silver Chalice](https://img.shields.io/badge/%20%23A8A8A8-A8A8A8)](https://imagecolorpicker.com/color-code/a8a8a8) /
+<!-- #A8A8A8 -->
+[![Alto](https://img.shields.io/badge/%20%23CFCFCF-CFCFCF)](https://imagecolorpicker.com/color-code/cfcfcf)
+<!-- #CFCFCF -->
 and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#cascadia-code).
 
 # Prerequisites
@@ -70,6 +72,7 @@ and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#
 - [`fd`](https://github.com/sharkdp/fd) or you gotta spend 69 hours trying to figure out why Telescope hates you.
 - [`ripgrep`](https://github.com/BurntSushi/ripgrep) in which I just treat it as the project-level search tool.
 <!-- - NodeJS v16 (use NVM to switch version), cannot get Grammarly LSP 0.0.4 work on high Node versions. -->
+- [`ra_multiplex`](https://github.com/pr2502/ra-multiplex) so rust-analyzer can cache.
 - **Possess a seasoned level of skill to exit Vim.**
 
 # Custom plugins
