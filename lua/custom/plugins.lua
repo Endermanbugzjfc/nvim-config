@@ -20,37 +20,6 @@ local plugins = {
     end, -- Override to setup mason-lspconfig
   },
 
-  -- override plugin configs
-  {
-    "williamboman/mason.nvim",
-    opts = overrides.mason
-  },
-
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = overrides.treesitter,
-  },
-
-  {
-    "nvim-tree/nvim-tree.lua",
-    opts = overrides.nvimtree,
-  },
-
-  {
-    "hrsh7th/nvim-cmp",
-    opts = overrides.cmp,
-  },
-
-  {
-    "nvim-telescope/telescope.nvim",
-    opts = overrides.telescope,
-  },
-
-  {
-    "lewis6991/gitsigns.nvim",
-    opts = overrides.gitsigns,
-  },
-
   -- Install a plugin
   {
     "max397574/better-escape.nvim",
@@ -69,25 +38,7 @@ local plugins = {
     end,
   },
 
-  {
-    "m-demare/attempt.nvim", -- Scratch files manager.
-    dependencies = {"nvim-lua/plenary.nvim" },
-    config = function()
-      require("attempt").setup()
-      require("telescope").load_extension "attempt"
-    end,
-  },
-
-  -- {
-  --   "ggandor/leap.nvim", -- Fast navigation within visible area.
-  --   event = "BufEnter",
-  --   dependencies = {
-  --     "tpope/vim-repeat",
-  --   },
-  --   config = function()
-  --     require("leap").add_default_mappings()
-  --   end,
-  -- },
+  { "m-demare/attempt.nvim", config = true },
 
   {
     "echasnovski/mini.nvim", -- The "Swiss Army knife".
@@ -95,12 +46,10 @@ local plugins = {
     version = '*',
     config  = function()
         require("mini.cursorword").setup()
-        -- require("mini.jump").setup({ mappings = { repeat_jump = "-" } })
-        require("mini.jump").setup()
+        require("mini.jump").setup(--[[ { mappings = { repeat_jump = "-" } } ]])
         require("mini.jump2d").setup() -- Key: <CR>
-        -- require("mini.map").setup()
-        -- require("mini.move").setup()
-        -- require("mini.sessions").setup()
+      -- mini.map: distraction.
+      -- mini.move: mistrigger-prone.
         require("mini.splitjoin").setup() -- Key: gS
         require("mini.surround").setup() -- Key: s+prefix
         require("mini.trailspace").setup()
@@ -108,7 +57,6 @@ local plugins = {
   },
 
   { "tpope/vim-sleuth", event = "BufEnter" }, -- Tab width adaptation.
-  { "yorickpeterse/nvim-window" }, -- Jump between windows.
 
   {
     "tpope/vim-abolish", -- Advanced substitute.
@@ -116,12 +64,7 @@ local plugins = {
     dependencies = { "markonm/traces.vim", event = "BufEnter" },
   },
 
-  {
-    "nvim-telescope/telescope-ui-select.nvim", -- UI for LSP code action.
-    config = function()
-      require("telescope").load_extension "ui-select"
-    end,
-  },
+  { "nvim-telescope/telescope-ui-select.nvim" }, -- UI for LSP code action.
 
   {
     "tzachar/cmp-tabnine",
@@ -156,8 +99,6 @@ local plugins = {
     end,
   },
 
-  -- { "haya14busa/incsearch.vim" },
-
   -- To make a plugin not be loaded
   -- {
   --   "NvChad/nvim-colorizer.lua",
@@ -172,5 +113,16 @@ local plugins = {
   --   lazy = false,
   -- }
 }
+
+for alias, plugin in pairs({
+    mason = "williamboman/mason.nvim",
+    treesitter = "nvim-treesitter/nvim-treesitter",
+    nvimtree = "nvim-tree/nvim-tree.lua",
+    cmp = "hrsh7th/nvim-cmp",
+    telescope = "nvim-telescope/telescope.nvim",
+    gitsigns = "lewis6991/gitsigns.nvim",
+}) do
+  table.insert(plugins, { plugin, opts = overrides[alias] })
+end
 
 return plugins

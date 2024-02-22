@@ -41,6 +41,8 @@ M.mason = {
     "gopls",
     "intelephense",
     "rust-analyzer",
+    "grammarly-languageserver",
+    "vim-language-server",
   },
 }
 
@@ -64,13 +66,12 @@ local cmp = require("cmp")
 M.cmp = {
   completion = {
     preselect = cmp.PreselectMode.None,
-    completeopt = "menu,menuone,noselect,noinsert,preview", -- Important. (ec5cf0b)
+    completeopt = "menu,menuone,noselect,noinsert,preview", -- Fixed first item unreachable.
   },
   mapping = {
-    ["<CR>"] = cmp.config.disable,
-    ["\\"] = cmp.mapping.confirm { -- Otherwise, cannot open a new line when completion popup is opened.
+    ["<CR>"] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
+      select = false, -- Otherwise, cannot open a new line when completion popup is opened.
     },
   },
   sources = {
@@ -79,30 +80,40 @@ M.cmp = {
     { name = "buffer" },
     { name = "nvim_lua" },
     { name = "path" },
-    { name = "cmp_tabnine" },
+    { name = "cmp_tabnine" }, -- tzachar/cmp-tabnine
   },
 }
 
 M.telescope = {
   defaults = {
-    -- prompt_prefix = " 揾笨 ",
-    file_ignore_patterns = { "node_modules", ".git" },
+    file_ignore_patterns = { ".git" },
   },
-  extensions_list = { "themes", "terms", "ui-select" },
   extensions = {
+    themes = {},
+    terms = {},
+    attempt = {},
     ["ui-select"] = {},
   },
   pickers = {
     find_files = {
       mappings = {
         n = {
+          ["<S-j>"] = "select_horizontal", -- Default <S-j>: join line.
+          ["<S-l>"] = "select_vertical", -- Default <S-l>: last line on the window.
+        },
+        i = {
           ["<M-h>"] = "select_horizontal",
-          ["<M-v>"] = "select_vertical", -- <C-v> not working on Windows.
+          ["<M-v>"] = "select_vertical",
         },
       },
     },
   },
 }
+local exts = {}
+for ext, _ in pairs(M.telescope.extensions) do
+  table.insert(exts, ext)
+end
+M.telescope.extensions_list = exts
 
 M.gitsigns = {
   signs = {
