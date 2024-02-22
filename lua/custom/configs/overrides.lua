@@ -107,6 +107,9 @@ M.telescope = {
 M.gitsigns = {
   signs = {
     delete = { text = "" }, -- nf-fa-eraser
+    change = { text = "▍" }, -- U+258D
+    add = { text = "▎" }, -- U+258E
+    untracked = { text = "▎" },
   },
 }
 
