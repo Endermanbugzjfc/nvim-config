@@ -80,33 +80,37 @@ M.cmp = {
     { name = "buffer" },
     { name = "nvim_lua" },
     { name = "path" },
-    { name = "cmp_tabnine" }, -- tzachar/cmp-tabnine
+    {
+      name = "cmp_tabnine",
+      -- Breaks the AI:
+      -- keyword_pattern = [[(*)]],
+      -- keyword_length = 1,
+    }, -- tzachar/cmp-tabnine
   },
 }
 
 M.telescope = {
   defaults = {
-    file_ignore_patterns = { ".git" },
+    file_ignore_patterns = { ".git/*", "!.git/info/exclude" },
+    mappings = {
+      n = {
+        ["<S-j>"] = "select_horizontal", -- Default <S-j>: join line.
+        ["<S-l>"] = "select_vertical", -- Default <S-l>: last line on the window.
+
+        ["<M-Enter>"] = "select_vertical",
+      },
+      i = {
+        ["<M-h>"] = "select_horizontal",
+        ["<M-Enter>"] = "select_vertical",
+        ["<M-v>"] = "select_vertical",
+      },
+    },
   },
   extensions = {
     themes = {},
     terms = {},
     attempt = {},
     ["ui-select"] = {},
-  },
-  pickers = {
-    find_files = {
-      mappings = {
-        n = {
-          ["<S-j>"] = "select_horizontal", -- Default <S-j>: join line.
-          ["<S-l>"] = "select_vertical", -- Default <S-l>: last line on the window.
-        },
-        i = {
-          ["<M-h>"] = "select_horizontal",
-          ["<M-v>"] = "select_vertical",
-        },
-      },
-    },
   },
 }
 local exts = {}
