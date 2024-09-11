@@ -99,6 +99,32 @@ local plugins = {
     end,
   },
 
+  -- {
+  --   "sindrets/diffview.nvim",
+  --   cmd = {
+  --     "DiffviewOpen",
+  --     "DiffviewClose",
+  --     "DiffviewToggleFiles",
+  --     "DiffviewFocusFiles",
+  --     "DiffviewRefresh",
+  --     "DiffviewFileHistory",
+  --   },
+  --   config = true,
+  -- },
+  --
+  -- {
+  --   "stevearc/oil.nvim",
+  --   cmd = "Oil",
+  --   config = true,
+  -- },
+  --
+  -- {
+  --   "iamcco/markdown-preview.nvim",
+  --   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+  --   ft = { "markdown" },
+  --   build = function() vim.fn["mkdp#util#install"]() end,
+  -- },
+
   -- To make a plugin not be loaded
   -- {
   --   "NvChad/nvim-colorizer.lua",

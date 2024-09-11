@@ -73,6 +73,7 @@ and had the font be [CaskaydiaCove Nerd Font](https://www.programmingfonts.org/#
 - [`ripgrep`](https://github.com/BurntSushi/ripgrep) in which I just treat it as the project-level search tool.
 <!-- - NodeJS v16 (use NVM to switch version), cannot get Grammarly LSP 0.0.4 work on high Node versions. -->
 - [`ra_multiplex`](https://github.com/pr2502/ra-multiplex) so rust-analyzer can cache.
+- [`nmap`](https://nmap.org/ncat/) for gdtoolkit.
 - **Possess a seasoned level of skill to exit Vim.**
 
 # Custom plugins
