@@ -25,7 +25,9 @@ M.general = {
     ["<leader>ad"] = { function() require("attempt").delete_buf() end, "Delete scratch file" },
     --["<leader>ac"] = { function() require("attempt").rename_buf() end },
     ["<leader>al"] = { ":Telescope attempt<CR>", "List scratch files" },
-    ["<leader>fZ"] = { ":Telescope live_grep<CR>", "Live grep" },
+
+    -- ["<leader>fZ"] = { ":Telescope live_grep<CR>", "Live grep" }, -- (Use <leader>fw.)
+    ["<leader>fr"] = { ":Telescope resume<CR>", "Resume last Telescope picker" },
     ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "Path with double (q)uotes" },
     ["<leader>x"] = { ":bd<CR>", "Close this buffer" },
     ["<leader>tw"] = { ":set wrap!<CR>", "Toggle word wrap" },
@@ -34,12 +36,18 @@ M.general = {
     ["gr"] = { ":Telescope lsp_references<CR>", "Goto references" },
     ["gd"] = { ":Telescope lsp_definitions<CR>", "Goto definitions" },
 
+    -- Always close NvimTree before opening the horizontal terminal:
+    ["<A-h>"] = {
+      function()
+        vim.cmd(":NvimTreeClose")
+        require("nvterm.terminal").toggle "horizontal"
+      end,
+      "Toggle horizontal term",
+    },
+
     -- https://github.com/lewis6991/gitsigns.nvim/blob/2c2463dbd82eddd7dbab881c3a62cfbfbe3c67ae/lua/gitsigns/actions.lua#L377
     ["<leader>gs"] = { function() require("gitsigns").stage_hunk() end, "Stage hunk" },
     ["<leader>gS"] = { function() require("gitsigns").undo_stage_hunk() end, "Undo last stage" },
-
-    -- https://github.com/yorickpeterse/nvim-window#lazynvim
-    ["<leader>wj"] = { "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
   },
   v = {
     [">"] = { ">gv", "indent"},
