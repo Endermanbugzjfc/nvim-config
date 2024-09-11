@@ -19,6 +19,7 @@ vim.opt.autoread = true
 vim.opt.autowrite = true
 
 vim.opt.clipboard = ""
+vim.opt.mouse = "" -- Windows Terminal: set env SPI_GETMOUSEVANISH to 1.
 if not unix then
   --vim.opt.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
   vim.opt.shell = "powershell"
@@ -28,6 +29,7 @@ if not unix then
 end
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 vim.opt.rnu = true
 -- vim.opt.spell = true -- Useless and wastes mapping slots.
 -- vim.opt.spelllang = "en_gb"
