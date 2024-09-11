@@ -39,7 +39,7 @@ M.general = {
     -- Always close NvimTree before opening the horizontal terminal:
     ["<A-h>"] = {
       function()
-        vim.cmd(":NvimTreeClose")
+        vim.cmd("silent! :NvimTreeClose")
         require("nvterm.terminal").toggle "horizontal"
       end,
       "Toggle horizontal term",
