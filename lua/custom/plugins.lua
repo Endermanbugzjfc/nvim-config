@@ -47,7 +47,11 @@ local plugins = {
     config  = function()
         require("mini.cursorword").setup()
         require("mini.jump").setup(--[[ { mappings = { repeat_jump = "-" } } ]])
-        require("mini.jump2d").setup() -- Key: <CR>
+        require("mini.jump2d").setup({
+        mappings = {
+          start_jumping = "<leader><leader>",
+        },
+      })
       -- mini.map: distraction.
       -- mini.move: mistrigger-prone.
         require("mini.splitjoin").setup() -- Key: gS
