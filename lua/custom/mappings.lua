@@ -4,6 +4,8 @@
 
 ---@type MappingsTable
 local M = {}
+local CmpSuspendRelease = nil
+vim.g.cmp_suspend_release = false
 
 M.general = {
   n = {
@@ -22,15 +24,31 @@ M.general = {
     -- ["<leader>ai"] = { function() require("attempt").new_input_ext() end },
     ["<leader>ar"] = { function() require("attempt").rename_buf() end, "Rename scratch file" },
     --["<leader>ar"] = { function() require("attempt").run() end },
-    ["<leader>ad"] = { function() require("attempt").delete_buf() end, "Delete scratch file" },
+    ["<leader>ad"] = { function() require("attempat").delete_buf() end, "Delete scratch file" },
     --["<leader>ac"] = { function() require("attempt").rename_buf() end },
     ["<leader>al"] = { ":Telescope attempt<CR>", "List scratch files" },
 
     -- ["<leader>fZ"] = { ":Telescope live_grep<CR>", "Live grep" }, -- (Use <leader>fw.)
     ["<leader>fr"] = { ":Telescope resume<CR>", "Resume last Telescope picker" },
+    ["<leader>fq"] = { ":Telescope diagnostics<CR>", "Project / workspace level diagnostics" },
+    ["<leader>fs"] = { ":Telescope lsp_document_symbols<CR>", "Document symbols" },
     ["<leader>pq"] = { ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', "Path with double (q)uotes" },
     ["<leader>x"] = { ":bd<CR>", "Close this buffer" },
     ["<leader>tw"] = { ":set wrap!<CR>", "Toggle word wrap" },
+    ["<leader>tc"] = {
+      function()
+        if CmpSuspendRelease ~= nil then
+          CmpSuspendRelease()
+          CmpSuspendRelease = nil
+          vim.g.cmp_suspend_release = false
+          return
+        end
+
+        vim.g.cmp_suspend_release = true
+        CmpSuspendRelease = require("cmp").suspend()
+      end,
+      "Toggle completion"
+    },
 
     -- Imo location list only suits diagnostics:
     ["gr"] = { ":Telescope lsp_references<CR>", "Goto references" },

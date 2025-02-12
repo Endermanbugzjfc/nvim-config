@@ -36,6 +36,9 @@ return {
 
     -- local col = 1 + vim.api.nvim_win_get_cursor(0)[2]
     -- modules[5] = "" .. col -- nf-seti-play_arrow
+    if vim.g.cmp_suspend_release then
+      modules[5] = "󱐑"
+    end
 
     local format = vim.api.nvim_buf_get_option(buffer, "fileformat")
     if format == "unix" then

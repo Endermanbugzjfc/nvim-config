@@ -30,7 +30,7 @@ end
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-vim.opt.rnu = true
+-- vim.opt.rnu = true
 -- vim.opt.spell = true -- Useless and wastes mapping slots.
 -- vim.opt.spelllang = "en_gb"
 
