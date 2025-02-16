@@ -1,7 +1,7 @@
 ```bash
 docker run -w /root -it --rm alpine:latest sh -uelic '
   apk add git nodejs neovim ripgrep build-base wget --update
-  git clone https://github.com/Endermanbugzjfc/nvim-config ~/.config/nvim
+  git clone https://github.com/Endermanbugzjfc/nvim-config ~/.config/nvim -b legacy/nvchad2.0
   nvim # prerequisites below are not included!
   '
 ```
