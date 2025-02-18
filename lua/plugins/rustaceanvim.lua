@@ -1,4 +1,4 @@
-return {
+return { -- Rust tools.
   'mrcjkb/rustaceanvim',
   version = '^5', -- Recommended
   ft = "rust",

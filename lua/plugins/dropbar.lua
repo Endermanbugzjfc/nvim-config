@@ -1,7 +1,6 @@
-return {
-  'Bekaboo/dropbar.nvim', -- Symbols breadcrumb bar.
-  -- optional, but required for fuzzy finder support
-  dependencies = {
+return { -- Symbols breadcrumb bar.
+  'Bekaboo/dropbar.nvim',
+  dependencies = { -- optional, but required for fuzzy finder support
     'nvim-telescope/telescope-fzf-native.nvim',
     build = 'make'
   },

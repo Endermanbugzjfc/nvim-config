@@ -1,5 +1,5 @@
-return {
-  "tpope/vim-abolish", -- Advanced substitute.
+return { -- Advanced substitute.
+  "tpope/vim-abolish",
   event = "BufEnter",
   dependencies = { "markonm/traces.vim", event = "BufEnter" },
   config = function ()

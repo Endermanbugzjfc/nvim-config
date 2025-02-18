@@ -1,5 +1,5 @@
 return {
-  "echasnovski/mini.nvim", -- The "Swiss Army knife".
+  "echasnovski/mini.nvim",
   event = "BufEnter",
   version = '*',
   config  = function()
@@ -24,5 +24,13 @@ return {
     require("mini.splitjoin").setup() -- Key: gS
     require("mini.surround").setup() -- Key: s+prefix
     require("mini.trailspace").setup()
+    require("mini.files").setup { -- Oil.nvim replacement.
+      options = {
+        permanent_delete = false,
+      },
+      windows = {
+        preview = true,
+      }
+    }
   end,
 }

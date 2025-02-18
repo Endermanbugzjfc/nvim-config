@@ -1,6 +1,7 @@
 return { -- Debugger UI.
   "rcarriga/nvim-dap-ui",
   dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+  event = "BufEnter", -- For persistent breakpoints to load automatically.
   config = function()
     require("dapui").setup()
     local dap, dapui = require("dap"), require("dapui")
@@ -16,5 +17,5 @@ return { -- Debugger UI.
     dap.listeners.before.event_exited.dapui_config = function()
       dapui.close()
     end
-  end
+  end,
 }

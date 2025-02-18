@@ -17,21 +17,23 @@ vim.keymap.set('n', '];', dropbar.select_next_context, { desc = 'Select next con
 -- DERIVED --
 
 map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope picker" })
--- map("n", "gr", ":Telescope lsp_references<CR>", { desc = "Goto references" })
--- map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "Goto definitions" })
+map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
+map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
+
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
 
 vim.keymap.set("n", "<Leader>dep", function()
   require("dapui").eval(vim.fn.getreg('"'))
 end, { desc = "Evaluate yanked expression in debugger" })
-require("persistent-breakpoints").setup()
 local persistent = require("persistent-breakpoints.api")
-vim.keymap.set("n", "<Leader>db", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
+vim.keymap.set("n", "<Leader>dd", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<Leader>dc", persistent.set_conditional_breakpoint, { desc = "Set conditional breakpoint" })
-vim.keymap.set("n", "<Leader>DB", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
+vim.keymap.set("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
 vim.keymap.set("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
-vim.keymap.set("n", "<Leader>DR", persistent.reload_breakpoints, { desc = "Reload breakpoints" })
 
-map("n", "<Leader>o", ":Oil<CR>")
+map("n", "<Leader>o", function()
+  require("mini.files").open(vim.fn.expand("%:p:"))
+end, { desc = "Open Mini.Files" })
 map(
   "n",
   "<A-h>",
@@ -62,6 +64,5 @@ map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "
   -- },
 -- Always close NvimTree before opening the horizontal terminal:
 map("v", ">", ">gv", { desc = "Easy indent"})
-map("n", "<Leader>cc", "<C-w><C-q>",{ desc = "Close focused panel or window" })
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
