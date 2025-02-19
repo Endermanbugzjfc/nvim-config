@@ -20,7 +20,7 @@ map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope 
 map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
 map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
 
-map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
 
 vim.keymap.set("n", "<Leader>dep", function()
   require("dapui").eval(vim.fn.getreg('"'))
