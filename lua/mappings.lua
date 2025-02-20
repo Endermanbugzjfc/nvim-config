@@ -32,7 +32,11 @@ vim.keymap.set("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Cl
 vim.keymap.set("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
 
 map("n", "<Leader>o", function()
-  require("mini.files").open(vim.fn.expand("%:p:"))
+  local mini_files = require("mini.files")
+  local status, _ = pcall(mini_files.open, vim.fn.expand("%:p:"))
+  if not status then
+    mini_files.open()
+  end
 end, { desc = "Open Mini.Files" })
 map(
   "n",
