@@ -47,7 +47,11 @@ map(
   end,
   { desc = "Toggle horizontal term" }
 )
-map("n", "<leader>l", require("mini.map").toggle_focus, { desc = "Focus mini map" })
+map("n", "<leader>l", function()
+  local mini_map = require("mini.map")
+  mini_map.open()
+  mini_map.toggle_focus()
+end, { desc = "Focus mini map" })
 
 -- MISCELLANEOUS --
 
@@ -67,6 +71,7 @@ map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "
   --   "Toggle completion"
   -- },
 -- Always close NvimTree before opening the horizontal terminal:
-map("v", ">", ">gv", { desc = "Easy indent"})
+map("v", ">", ">gv", { desc = "Easy indent increase"})
+map("v", "<", "<gv", { desc = "Easy indent decrease"})
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
