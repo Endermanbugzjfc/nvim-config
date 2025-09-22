@@ -1,10 +1,14 @@
 -- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
 
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local lspconfig = require "lspconfig"
 
 -- EXAMPLE
 local servers = {
+  "nil_ls",
+  "eslint",
+
   "html",
   "cssls",
 }
