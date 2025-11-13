@@ -32,7 +32,11 @@ vim.keymap.set("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Cl
 vim.keymap.set("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
 
 map("n", "<Leader>o", function()
-  require("mini.files").open(vim.fn.expand("%:p:"))
+  local mini_files = require("mini.files")
+  local status, _ = pcall(mini_files.open, vim.fn.expand("%:p:"))
+  if not status then
+    mini_files.open()
+  end
 end, { desc = "Open Mini.Files" })
 map(
   "n",
@@ -43,7 +47,11 @@ map(
   end,
   { desc = "Toggle horizontal term" }
 )
-map("n", "<leader>l", require("mini.map").toggle_focus, { desc = "Focus mini map" })
+map("n", "<leader>l", function()
+  local mini_map = require("mini.map")
+  mini_map.open()
+  mini_map.toggle_focus()
+end, { desc = "Focus mini map" })
 
 -- MISCELLANEOUS --
 
@@ -63,6 +71,7 @@ map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "
   --   "Toggle completion"
   -- },
 -- Always close NvimTree before opening the horizontal terminal:
-map("v", ">", ">gv", { desc = "Easy indent"})
+map("v", ">", ">gv", { desc = "Easy indent increase"})
+map("v", "<", "<gv", { desc = "Easy indent decrease"})
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })

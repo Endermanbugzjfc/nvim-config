@@ -3,7 +3,7 @@ return { -- Persistent DAP breakpoints manager.
   dependencies = { "mfussenegger/nvim-dap" },
   event = "BufReadPost",
   opts = {
-    save_dir = "./dev", -- TODO: PR upstream only create folder on save.
+    save_dir = "./",
     load_breakpoints_event = "BufReadPost",
   },
   config = true,
