@@ -8,13 +8,19 @@ local M = {}
 M.base46 = {
 	theme = "github_light",
   theme_toggle = { "github_light", "github_light" },
-	-- hl_override = {
-	-- 	Comment = { italic = true },
-	-- 	["@comment"] = { italic = true },
-	-- },
+	hl_override = {
+		-- Comment = { italic = true },
+		-- ["@comment"] = { italic = true },
+    MatchWord = {
+      -- bg = "#DDDDDD",
+      italic = true,
+      bold = true,
+      bg = "none",
+    },
+	},
 }
 
--- M.nvdash = { load_on_startup = true }
+M.nvdash = { load_on_startup = true }
 M.ui = {
 --       tabufline = {
 --          lazyload = false
