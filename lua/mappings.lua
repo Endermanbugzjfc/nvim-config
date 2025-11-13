@@ -33,29 +33,29 @@ map("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
 
 map("n", "<Leader>o", function()
   local mini_files = require("mini.files")
-  local status, _ = pcall(mini_files.open, vim.fn.expand("%:p:"))
-  if not status then
-    mini_files.open()
-  end
+  mini_files.open(vim.api.nvim_buf_get_name(0))
 end, { desc = "Open Mini.Files" })
-map(
-  "n",
-  "<A-h>",
-  function()
-    vim.cmd("silent! :NvimTreeClose")
-    require("nvchad.term").toggle { pos = "sp", id = "htoggleTerm" }
-  end,
-  { desc = "Toggle horizontal term" }
-)
+
+local mini_map = require("mini.map")
 map("n", "<leader>l", function()
-  local mini_map = require("mini.map")
   mini_map.open()
   mini_map.toggle_focus()
 end, { desc = "Focus mini map" })
+map("n", "<leader>L", function()
+  mini_map.close()
+end)
+
+-- Disable NvimTree:
+map("n", "<C-n>", "")
 -- }}}
+
 -- {{{ MISCELLANEOUS
 
-map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "Path with double (q)uotes" })
+map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "Copy path with double (q)uotes" })
+map("n", "<leader>pr", ':let @+ = expand("%:p")<CR>', { desc = "Copy path (r)aw" })
+map("n", "<leader>pQ", ':let @+ = expand("%:p:h")<CR>', { desc = "Copy parent path with double (q)uotes" })
+map("n", "<leader>pR", ':let @+ = expand("%:p")<CR>', { desc = "Copy parent path (r)aw" })
+
   -- ["<leader>tc"] = {
   --   function()
   --     if CmpSuspendRelease ~= nil then
