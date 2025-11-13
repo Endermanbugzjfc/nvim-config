@@ -10,26 +10,26 @@ map("n", "<leader>al", ":Telescope attempt<CR>", { desc = "List scratch files" }
 
 -- https://github.com/Bekaboo/dropbar.nvim?tab=readme-ov-file#installation
 local dropbar = require('dropbar.api')
-vim.keymap.set('n', '<Leader>;', dropbar.pick, { desc = 'Pick symbols in winbar' })
-vim.keymap.set('n', '[;', dropbar.goto_context_start, { desc = 'Go to start of current context' })
-vim.keymap.set('n', '];', dropbar.select_next_context, { desc = 'Select next context' })
+map('n', '<Leader>;', dropbar.pick, { desc = 'Pick symbols in winbar' })
+map('n', '[;', dropbar.goto_context_start, { desc = 'Go to start of current context' })
+map('n', '];', dropbar.select_next_context, { desc = 'Select next context' })
 
--- DERIVED --
+-- {{{ DERIVED
 
 map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope picker" })
-map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
+-- map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
 map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
 
 map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
 
-vim.keymap.set("n", "<Leader>dep", function()
+map("n", "<Leader>dep", function()
   require("dapui").eval(vim.fn.getreg('"'))
 end, { desc = "Evaluate yanked expression in debugger" })
 local persistent = require("persistent-breakpoints.api")
-vim.keymap.set("n", "<Leader>dd", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
-vim.keymap.set("n", "<Leader>dc", persistent.set_conditional_breakpoint, { desc = "Set conditional breakpoint" })
-vim.keymap.set("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
-vim.keymap.set("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
+map("n", "<Leader>dd", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
+map("n", "<Leader>dc", persistent.set_conditional_breakpoint, { desc = "Set conditional breakpoint" })
+map("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
+map("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
 
 map("n", "<Leader>o", function()
   local mini_files = require("mini.files")
@@ -52,8 +52,8 @@ map("n", "<leader>l", function()
   mini_map.open()
   mini_map.toggle_focus()
 end, { desc = "Focus mini map" })
-
--- MISCELLANEOUS --
+-- }}}
+-- {{{ MISCELLANEOUS
 
 map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "Path with double (q)uotes" })
   -- ["<leader>tc"] = {
@@ -71,7 +71,10 @@ map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "
   --   "Toggle completion"
   -- },
 -- Always close NvimTree before opening the horizontal terminal:
+
 map("v", ">", ">gv", { desc = "Easy indent increase"})
 map("v", "<", "<gv", { desc = "Easy indent decrease"})
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
+
+-- }}}
