@@ -83,6 +83,7 @@ map("n", "<leader>zm", function()
   else
     vim.o.foldmethod = "indent"
   end
+  vim.cmd("set foldmethod")
 end, { desc = "Cycle foldmethod between marker and indent" })
 -- TODO: toggle wrap text
 
