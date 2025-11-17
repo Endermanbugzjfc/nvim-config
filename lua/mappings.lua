@@ -77,4 +77,13 @@ map("v", "<", "<gv", { desc = "Easy indent decrease"})
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
 
+map("n", "<leader>zm", function()
+  if vim.o.foldmethod ~= "marker" then
+    vim.o.foldmethod = "marker"
+  else
+    vim.o.foldmethod = "indent"
+  end
+end, { desc = "Cycle foldmethod between marker and indent" })
+-- TODO: toggle wrap text
+
 -- }}}
