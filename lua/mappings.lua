@@ -1,6 +1,8 @@
 require "nvchad.mappings"
 local map = vim.keymap.set
 
+-- {{{ PLUGINS
+
 -- https://github.com/m-demare/attempt.nvim/#keymaps
 local attempt = require("attempt")
 map("n", "<leader>an", attempt.new_input_ext, { desc = "New scratch file with extension name"})
@@ -13,14 +15,6 @@ local dropbar = require('dropbar.api')
 map('n', '<Leader>;', dropbar.pick, { desc = 'Pick symbols in winbar' })
 map('n', '[;', dropbar.goto_context_start, { desc = 'Go to start of current context' })
 map('n', '];', dropbar.select_next_context, { desc = 'Select next context' })
-
--- {{{ DERIVED
-
-map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope picker" })
--- map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
-map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
-
-map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
 
 map("n", "<Leader>dep", function()
   require("dapui").eval(vim.fn.getreg('"'))
@@ -45,11 +39,15 @@ map("n", "<leader>L", function()
   mini_map.close()
 end)
 
--- Disable NvimTree:
-map("n", "<C-n>", "")
 -- }}}
 
--- {{{ MISCELLANEOUS
+-- {{{ FEATURES
+
+map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope picker" })
+-- map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
+map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
+
+map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
 
 map("n", "<leader>pq", ':let @+ = \'"\' . expand("%:p") . \'"\'<CR>', { desc = "Copy path with double (q)uotes" })
 map("n", "<leader>pr", ':let @+ = expand("%:p")<CR>', { desc = "Copy path (r)aw" })
@@ -72,8 +70,6 @@ map("n", "<leader>pR", ':let @+ = expand("%:p")<CR>', { desc = "Copy parent path
   -- },
 -- Always close NvimTree before opening the horizontal terminal:
 
-map("v", ">", ">gv", { desc = "Easy indent increase"})
-map("v", "<", "<gv", { desc = "Easy indent decrease"})
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
 
@@ -87,4 +83,14 @@ map("n", "<leader>zm", function()
 end, { desc = "Cycle foldmethod between marker and indent" })
 -- TODO: toggle wrap text
 
+-- }}}
+
+-- {{{ WORKAROUNDS
+map("v", ">", ">gv", { desc = "indent increase (improved)"})
+map("v", "<", "<gv", { desc = "indent decrease (improved)"})
+
+map("v", "u", "", { desc = "Unmapped (previously converts selection to lowercase)" });
+map("v", "<leader>uu", "u", { desc = "Converts selection to lowercase" })
+
+map("n", "<C-n>", "", { desc = "Unmapped (previously opens NvimTree)" })
 -- }}}
