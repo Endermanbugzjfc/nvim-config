@@ -83,6 +83,10 @@ map("n", "<leader>zm", function()
 end, { desc = "Cycle foldmethod between marker and indent" })
 -- TODO: toggle wrap text
 
+local base64 = require("base46")
+map("n", "<leader>tt", base64.toggle_theme, { desc = "Toggle theme" })
+map("n", "<leader>tb", base64.toggle_transparency, { desc = "Toggle transparency" })
+
 -- }}}
 
 -- {{{ WORKAROUNDS
