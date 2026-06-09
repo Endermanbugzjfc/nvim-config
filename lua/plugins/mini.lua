@@ -23,6 +23,7 @@ return {
       window = {
         focusable = true,
         width = 5,
+        winblend = 90,
       },
       integrations = {
         map.gen_integration.builtin_search(),
