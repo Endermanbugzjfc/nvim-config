@@ -13,13 +13,24 @@ return {
     -- https://github.com/echasnovski/mini.jump2d/blob/3de91ea974627c4c2645e288bf0a6e6717a4dfa8/lua/mini/jump2d.lua#L121C8-L121C69
     vim.api.nvim_set_hl(0, 'MiniJump2dSpot', { reverse = true })
 
-    require("mini.map").setup {
+    local map = require("mini.map")
+    map.setup {
+      symbols = {
+        encode = map.gen_encode_symbols.dot('4x2'),
+        scroll_line = '',
+        scroll_view = '',
+      },
       window = {
         focusable = true,
         width = 5,
       },
+      integrations = {
+        map.gen_integration.builtin_search(),
+        map.gen_integration.diff(),
+        map.gen_integration.diagnostic(),
+      },
     }
-    require("mini.map").open()
+    map.open()
 
     require("mini.splitjoin").setup() -- Key: gS
     require("mini.surround").setup() -- Key: s+prefix
