@@ -89,6 +89,14 @@ map("n", "<leader>ty", base64.toggle_transparency, { desc = "Toggle transparency
 
 map("n", "<leader>Bm", ":new<CR>:put =execute('messages')<CR>", { desc = "Show Nvim messages (in buffer)" })
 
+-- Move current buffer tab forward / backward in the bufferline
+map("n", "-", function()
+  require("nvchad.tabufline").move_buf(1)
+end, { desc = "buffer move forward" })
+
+map("n", "_", function()
+  require("nvchad.tabufline").move_buf(-1)
+end, { desc = "buffer move backward" })
 -- }}}
 
 -- {{{ WORKAROUNDS
@@ -98,5 +106,8 @@ map("v", "<", "<gv", { desc = "indent decrease (improved)"})
 map("v", "u", "", { desc = "Unmapped (previously converts selection to lowercase)" });
 map("v", "<leader>uu", "u", { desc = "Converts selection to lowercase" })
 
-map("n", "<C-n>", "", { desc = "Unmapped (previously opens NvimTree)" })
+-- map("n", "<C-n>", "", { desc = "Unmapped (previously opens NvimTree)" })
+
+-- <C-i> and <Tab> have the same terminal keycode and <Tab> is next tab
+map("n", "<C-n>", "<Esc>1\t<CR>", { desc = "jumplist forward" })
 -- }}}
