@@ -33,7 +33,14 @@ return {
     }
     map.open()
 
-    require("mini.splitjoin").setup() -- Key: gS
+    require("mini.splitjoin").setup({
+      detect = {
+        -- Defaults: the first three.
+        brackets = { '%b()', '%b[]', '%b{}', '%b<>' },
+        separator = '[%s,]+',
+        exclude_regions = { '%b()', '%b[]', '%b{}', '%b<>', '%b""', "%b''" },
+      }
+    }) -- Key: gS
     require("mini.surround").setup() -- Key: s+prefix
     require("mini.trailspace").setup()
     require("mini.files").setup { -- Oil.nvim replacement.

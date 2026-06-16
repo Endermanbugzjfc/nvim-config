@@ -92,11 +92,16 @@ map("n", "<leader>Bm", ":new<CR>:put =execute('messages')<CR>", { desc = "Show N
 -- Move current buffer tab forward / backward in the bufferline
 map("n", "-", function()
   require("nvchad.tabufline").move_buf(1)
-end, { desc = "buffer move forward" })
+end, { desc = "Buffer move forward" })
 
 map("n", "_", function()
   require("nvchad.tabufline").move_buf(-1)
-end, { desc = "buffer move backward" })
+end, { desc = "Buffer move backward" })
+
+-- Copy current line to system clipboard
+map("n", "+", 'V"+y', { desc = "Copy current line to system clipboard" })
+map("v", "+", '"+y', { desc = "Copy selection to system clipboard" })
+
 -- }}}
 
 -- {{{ WORKAROUNDS
