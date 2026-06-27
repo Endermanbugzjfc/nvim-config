@@ -91,11 +91,43 @@ map("n", "<leader>Bm", ":new<CR>:put =execute('messages')<CR>", { desc = "Show N
 
 -- Move current buffer tab forward / backward in the bufferline
 map("n", "-", function()
-  require("nvchad.tabufline").move_buf(1)
+  local bufs = vim.t.bufs
+  local cur = vim.api.nvim_get_current_buf()
+
+  for i, buf in ipairs(bufs) do
+    if buf == cur then
+      if i == #bufs then
+        -- Rotate: pull from end, insert at beginning
+        table.remove(bufs, i)
+        table.insert(bufs, 1, cur)
+        vim.t.bufs = bufs
+        vim.cmd("redrawtabline")
+      else
+        require("nvchad.tabufline").move_buf(1)
+      end
+      break
+    end
+  end
 end, { desc = "Buffer move forward" })
 
 map("n", "_", function()
-  require("nvchad.tabufline").move_buf(-1)
+  local bufs = vim.t.bufs
+  local cur = vim.api.nvim_get_current_buf()
+
+  for i, buf in ipairs(bufs) do
+    if buf == cur then
+      if i == 1 then
+        -- Rotate: pull from beginning, insert at end
+        table.remove(bufs, i)
+        table.insert(bufs, cur)
+        vim.t.bufs = bufs
+        vim.cmd("redrawtabline")
+      else
+        require("nvchad.tabufline").move_buf(-1)
+      end
+      break
+    end
+  end
 end, { desc = "Buffer move backward" })
 
 -- Copy current line to system clipboard
