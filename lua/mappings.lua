@@ -134,6 +134,31 @@ end, { desc = "Buffer move backward" })
 map("n", "+", 'V"+y', { desc = "Copy current line to system clipboard" })
 map("v", "+", '"+y', { desc = "Copy selection to system clipboard" })
 
+-- Close other tabs
+map("n", "<leader>X", function()
+  local cur = vim.api.nvim_get_current_buf()
+  local bufs = vim.t.bufs
+
+  local cur_index = 1
+  for i, buf in ipairs(bufs) do
+    if buf == cur then
+      cur_index = i
+      break
+    end
+  end
+
+  -- Hide all buffers to the right
+  for i = cur_index + 1, #bufs do
+    vim.bo[bufs[i]].buflisted = false
+  end
+
+  -- Trim the tabufline to everything up to and including current
+  vim.t.bufs = { unpack(bufs, 1, cur_index) }
+  vim.cmd("redrawtabline")
+end, { desc = "Close buffers to the right" })
+
+map("n", "<C-x>", "<C-w>q", { desc = "Close pane" })
+
 -- }}}
 
 -- {{{ WORKAROUNDS
@@ -144,7 +169,48 @@ map("v", "u", "", { desc = "Unmapped (previously converts selection to lowercase
 map("v", "<leader>uu", "u", { desc = "Converts selection to lowercase" })
 
 -- map("n", "<C-n>", "", { desc = "Unmapped (previously opens NvimTree)" })
+map("n", "<leader>h", "", { desc = "Unmapped (previously terminal new horizontal term)" })
 
 -- <C-i> and <Tab> have the same terminal keycode and <Tab> is next tab
 map("n", "<C-n>", "<Esc>1\t<CR>", { desc = "jumplist forward" })
+
+-- Hide instead of deleting buffer:
+map("n", "<leader>x", function()
+  local cur = vim.api.nvim_get_current_buf()
+  local bufs = vim.t.bufs
+
+  for i, buf in ipairs(bufs) do
+    if buf == cur then
+      table.remove(bufs, i)
+
+      -- Switch to an adjacent buffer before hiding
+      if #bufs > 0 then
+        vim.api.nvim_set_current_buf(bufs[math.min(i, #bufs)])
+      end
+      break
+    end
+  end
+
+  vim.t.bufs = bufs
+  vim.cmd("redrawtabline")
+
+  -- Hide from tabufline/bufferlist but DO NOT delete — preserves jumplist
+  vim.bo[cur].buflisted = false
+end, { desc = "Close buffer" })
+
+-- Alt + tab number:
+for i = 1, 9 do
+  map("n", "<A-" .. i .. ">", function()
+    local bufs = vim.t.bufs
+    if bufs[i] then
+      vim.api.nvim_set_current_buf(bufs[i])
+    end
+  end, { desc = "Go to buffer " .. i })
+end
+
+map("n", "<A-0>", function()
+  local bufs = vim.t.bufs
+  vim.api.nvim_set_current_buf(bufs[#bufs])
+end, { desc = "Go to last buffer" })
+
 -- }}}
