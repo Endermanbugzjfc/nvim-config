@@ -131,14 +131,29 @@ map("n", "<leader>X", function()
     end
   end
 
-  -- Hide all buffers to the right
+  local skipped = 0
   for i = cur_index + 1, #bufs do
-    vim.bo[bufs[i]].buflisted = false
+    if vim.bo[bufs[i]].modified then
+      skipped = skipped + 1
+    else
+      vim.bo[bufs[i]].buflisted = false
+    end
   end
 
-  -- Trim the tabufline to everything up to and including current
-  vim.t.bufs = { unpack(bufs, 1, cur_index) }
+  -- Rebuild keeping current + any modified buffers to the right
+  local new_bufs = { unpack(bufs, 1, cur_index) }
+  for i = cur_index + 1, #bufs do
+    if vim.bo[bufs[i]].modified then
+      table.insert(new_bufs, bufs[i])
+    end
+  end
+
+  vim.t.bufs = new_bufs
   vim.cmd("redrawtabline")
+
+  if skipped > 0 then
+    vim.notify(skipped .. " modified buffer(s) were kept", vim.log.levels.WARN)
+  end
 end, { desc = "Close buffers to the right" })
 
 -- Quicklist pick line:
@@ -229,13 +244,17 @@ map("n", "<C-n>", "<Esc>1\t<CR>", { desc = "jumplist forward" })
 -- Hide instead of deleting buffer:
 map("n", "<leader>x", function()
   local cur = vim.api.nvim_get_current_buf()
+
+  if vim.bo[cur].modified then
+    vim.notify("Buffer has unsaved changes", vim.log.levels.WARN)
+    return
+  end
+
   local bufs = vim.t.bufs
 
   for i, buf in ipairs(bufs) do
     if buf == cur then
       table.remove(bufs, i)
-
-      -- Switch to an adjacent buffer before hiding
       if #bufs > 0 then
         vim.api.nvim_set_current_buf(bufs[math.min(i, #bufs)])
       end
@@ -243,10 +262,9 @@ map("n", "<leader>x", function()
     end
   end
 
+  -- Hide from tabufline/bufferlist but DO NOT delete — preserves jumplist
   vim.t.bufs = bufs
   vim.cmd("redrawtabline")
-
-  -- Hide from tabufline/bufferlist but DO NOT delete — preserves jumplist
   vim.bo[cur].buflisted = false
 end, { desc = "Close buffer" })
 
