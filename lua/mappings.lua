@@ -54,22 +54,6 @@ map("n", "<leader>pr", ':let @+ = expand("%:p")<CR>', { desc = "Copy path (r)aw"
 map("n", "<leader>pQ", ':let @+ = expand("%:p:h")<CR>', { desc = "Copy parent path with double (q)uotes" })
 map("n", "<leader>pR", ':let @+ = expand("%:p")<CR>', { desc = "Copy parent path (r)aw" })
 
-  -- ["<leader>tc"] = {
-  --   function()
-  --     if CmpSuspendRelease ~= nil then
-  --       CmpSuspendRelease()
-  --       CmpSuspendRelease = nil
-  --       vim.g.cmp_suspend_release = false
-  --       return
-  --     end
-  --
-  --     vim.g.cmp_suspend_release = true
-  --     CmpSuspendRelease = require("cmp").suspend()
-  --   end,
-  --   "Toggle completion"
-  -- },
--- Always close NvimTree before opening the horizontal terminal:
-
 map("n", "|", "<C-w>+", { desc = "Increase panel height" })
 map("n", "\\", "<C-w>>", { desc = "Increase panel width" })
 
@@ -157,6 +141,74 @@ map("n", "<leader>X", function()
   vim.cmd("redrawtabline")
 end, { desc = "Close buffers to the right" })
 
+-- Quicklist pick line:
+-- Refresh signs to match current qflist state
+local function refresh_qf_signs()
+  vim.fn.sign_unplace("QFMarkerGroup")
+  for _, item in ipairs(vim.fn.getqflist()) do
+    if item.bufnr and item.bufnr > 0 then
+      vim.fn.sign_place(0, "QFMarkerGroup", "QFMarker", item.bufnr, { lnum = item.lnum })
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+  callback = function()
+    refresh_qf_signs()
+  end,
+  desc = "Refresh quickfix signs after qf update",
+})
+
+map("n", "<leader>q", function()
+  local items = vim.fn.getqflist()
+  local cur_buf = vim.api.nvim_get_current_buf()
+  local cur_lnum = vim.api.nvim_win_get_cursor(0)[1]
+
+  -- Check if current line is already in the list
+  local found = false
+  for i, item in ipairs(items) do
+    if item.bufnr == cur_buf and item.lnum == cur_lnum then
+      table.remove(items, i)
+      found = true
+      vim.notify("Line removed from quickfix", vim.log.levels.INFO)
+      break
+    end
+  end
+
+  if not found then
+    table.insert(items, {
+      bufnr = cur_buf,
+      lnum  = cur_lnum,
+      col   = vim.api.nvim_win_get_cursor(0)[2],
+      text  = vim.api.nvim_get_current_line(),
+    })
+    vim.notify("Line added to quickfix", vim.log.levels.INFO)
+  end
+
+  vim.fn.setqflist(items)
+  refresh_qf_signs()
+end, { desc = "Toggle line in quickfix" })
+
+map("n", "<leader>Q", function()
+  vim.fn.setqflist({})
+  vim.fn.sign_unplace("QFMarkerGroup")  -- clear signs too
+end, { desc = "Clear quickfix" })
+
+-- Alt + tab number:
+for i = 1, 9 do
+  map("n", "<A-" .. i .. ">", function()
+    local bufs = vim.t.bufs
+    if bufs[i] then
+      vim.api.nvim_set_current_buf(bufs[i])
+    end
+  end, { desc = "Go to buffer " .. i })
+end
+
+map("n", "<A-0>", function()
+  local bufs = vim.t.bufs
+  vim.api.nvim_set_current_buf(bufs[#bufs])
+end, { desc = "Go to last buffer" })
+
 map("n", "<C-x>", "<C-w>q", { desc = "Close pane" })
 
 -- }}}
@@ -197,20 +249,5 @@ map("n", "<leader>x", function()
   -- Hide from tabufline/bufferlist but DO NOT delete — preserves jumplist
   vim.bo[cur].buflisted = false
 end, { desc = "Close buffer" })
-
--- Alt + tab number:
-for i = 1, 9 do
-  map("n", "<A-" .. i .. ">", function()
-    local bufs = vim.t.bufs
-    if bufs[i] then
-      vim.api.nvim_set_current_buf(bufs[i])
-    end
-  end, { desc = "Go to buffer " .. i })
-end
-
-map("n", "<A-0>", function()
-  local bufs = vim.t.bufs
-  vim.api.nvim_set_current_buf(bufs[#bufs])
-end, { desc = "Go to last buffer" })
 
 -- }}}

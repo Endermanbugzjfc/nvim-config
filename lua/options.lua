@@ -37,3 +37,24 @@ vim.api.nvim_create_user_command('A', function()
   vim.fn.chansend(job_id, content)
   vim.fn.chanclose(job_id, 'stdin')
 end, {})
+
+-- Quicklist pick line:
+-- Define the sign once
+vim.fn.sign_define("QFMarker", { text = "", texthl = "DiagnosticInfo" })
+
+-- Vimgrep current file type:
+vim.api.nvim_create_user_command("V", function(opts)
+  local pattern = opts.args
+  local ext = vim.fn.expand("%:e")
+
+  if ext == "" then
+    vim.notify("No file extension detected", vim.log.levels.WARN)
+    return
+  end
+
+  vim.cmd(string.format("vimgrep /%s/ **/*.%s", pattern, ext))
+  vim.cmd("copen")
+end, {
+  nargs = 1,
+  desc = "Vimgrep pattern across current filetype",
+})
