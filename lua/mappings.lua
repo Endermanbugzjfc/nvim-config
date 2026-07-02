@@ -19,11 +19,11 @@ map('n', '];', dropbar.select_next_context, { desc = 'Select next context' })
 map("n", "<Leader>dep", function()
   require("dapui").eval(vim.fn.getreg('"'))
 end, { desc = "Evaluate yanked expression in debugger" })
-local persistent = require("persistent-breakpoints.api")
-map("n", "<Leader>dd", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
-map("n", "<Leader>dc", persistent.set_conditional_breakpoint, { desc = "Set conditional breakpoint" })
-map("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
-map("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
+-- local persistent = require("persistent-breakpoints.api")
+-- map("n", "<Leader>dd", persistent.toggle_breakpoint, { desc = "Toggle breakpoint" })
+-- map("n", "<Leader>dc", persistent.set_conditional_breakpoint, { desc = "Set conditional breakpoint" })
+-- map("n", "<Leader>d!", persistent.clear_all_breakpoints, { desc = "Clear all breakpoints" })
+-- map("n", "<Leader>dl", persistent.set_log_point, { desc = "Set log point" })
 
 map("n", "<Leader>o", function()
   local mini_files = require("mini.files")
@@ -225,6 +225,25 @@ map("n", "<A-0>", function()
 end, { desc = "Go to last buffer" })
 
 map("n", "<C-x>", "<C-w>q", { desc = "Close pane" })
+
+local dap = require("dap")
+local dapui = require("dapui")
+
+map("n", "<leader>dd", dap.toggle_breakpoint, { desc = "DAP Toggle Breakpoint" })
+map("n", "<leader>dC", function()
+  dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { desc = "DAP Conditional Breakpoint" })
+map("n", "<leader>d<space>", dap.continue, { desc = "DAP Continue/Start" })
+map("n", "<leader>di", dap.step_into, { desc = "DAP Step Into" })
+map("n", "<CR>", dap.step_over, { desc = "DAP Step Over" })
+map("n", "<leader>do", dap.step_out, { desc = "DAP Step Out" })
+map("n", "<leader>dr", dap.repl.open, { desc = "DAP REPL" })
+map("n", "<leader>du", dapui.toggle, { desc = "DAP UI Toggle" })
+map("n", "<leader>dt", dap.terminate, { desc = "DAP Terminate" })
+
+-- TODO:
+-- nvim kill a dangling doc window
+-- :lua for _, win in ipairs(vim.api.nvim_list_wins()) do if vim.api.nvim_win_get_config(win).relative ~= "" then vim.api.nvim_win_close(win, true) end end
 
 -- }}}
 

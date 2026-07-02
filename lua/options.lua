@@ -42,6 +42,29 @@ end, {})
 -- Define the sign once
 vim.fn.sign_define("QFMarker", { text = "", texthl = "DiagnosticInfo" })
 
+-- https://poe.com/chat/956upl568lvwke4h4l
+-- Debugging:
+vim.fn.sign_define("DapBreakpoint", {
+  text = "●",
+  texthl = "DiagnosticSignError",
+  linehl = "",
+  numhl = "",
+})
+
+vim.fn.sign_define("DapBreakpointCondition", {
+  text = "◆",
+  texthl = "DiagnosticSignWarn",
+  linehl = "",
+  numhl = "",
+})
+
+vim.fn.sign_define("DapStopped", {
+  text = "→",
+  texthl = "DiagnosticSignInfo",
+  linehl = "Visual",
+  numhl = "DiagnosticSignInfo",
+})
+
 -- Vimgrep current file type:
 vim.api.nvim_create_user_command("V", function(opts)
   local pattern = opts.args

@@ -1,13 +1,17 @@
 require("nvchad.configs.lspconfig").defaults()
 
+vim.lsp.config("jdtls", require("after.lsp.jdtls"))
+
 local servers = {
   "nil_ls",
   "eslint",
 
   "html",
+  "jdtls",
   "cssls",
 }
 vim.lsp.enable(servers)
+
 
 -- read :h vim.lsp.config for changing options of lsp servers
 
