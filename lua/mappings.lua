@@ -254,7 +254,7 @@ map("v", "<", "<gv", { desc = "indent decrease (improved)"})
 map("v", "u", "", { desc = "Unmapped (previously converts selection to lowercase)" });
 map("v", "<leader>uu", "u", { desc = "Converts selection to lowercase" })
 
--- map("n", "<C-n>", "", { desc = "Unmapped (previously opens NvimTree)" })
+map("n", "<leader>e", "", { desc = "Unmapped (previously opens NvimTree)" })
 map("n", "<leader>h", "", { desc = "Unmapped (previously terminal new horizontal term)" })
 
 -- <C-i> and <Tab> have the same terminal keycode and <Tab> is next tab
