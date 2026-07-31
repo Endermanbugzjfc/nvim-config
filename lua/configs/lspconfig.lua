@@ -9,6 +9,8 @@ local servers = {
   "html",
   "jdtls",
   "cssls",
+
+  "ts_ls",
 }
 vim.lsp.enable(servers)
 

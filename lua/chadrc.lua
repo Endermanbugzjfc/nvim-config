@@ -7,7 +7,7 @@ local M = {}
 
 M.base46 = {
 	theme = "flexoki-light",
-  theme_toggle = { "github_light", "flexoki-light" },
+  theme_toggle = { "flexoki-light", "flexoki-light" },
 	hl_override = {
 		-- Comment = { italic = true },
 		-- ["@comment"] = { italic = true },
