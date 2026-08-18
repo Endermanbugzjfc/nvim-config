@@ -30,7 +30,26 @@ return { -- Rust tools.
       --     adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
       --   },
       -- }
-      return {}
+      return {
+        server = {
+          -- Throw more of the 24 cores + RAM at rust-analyzer so indexing and
+          -- completion feel snappier on large workspaces.
+          default_settings = {
+            ["rust-analyzer"] = {
+              -- Leave a few cores for the editor/build.
+              numThreads = 16,
+              cachePriming = {
+                enable = true,
+                numThreads = 16,
+              },
+              -- Bigger symbol/query caches -> fewer recomputations.
+              lru = {
+                capacity = 1024,
+              },
+            },
+          },
+        },
+      }
     end
   end
 }

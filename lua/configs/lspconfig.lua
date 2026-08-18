@@ -2,6 +2,14 @@ require("nvchad.configs.lspconfig").defaults()
 
 vim.lsp.config("jdtls", require("after.lsp.jdtls"))
 
+-- tsserver is a Node process; by default it caps its heap fairly low and slows
+-- down on big projects. Give it 8G so it stops thrashing / restarting.
+vim.lsp.config("ts_ls", {
+  init_options = {
+    maxTsServerMemory = 8192, -- MB
+  },
+})
+
 local servers = {
   "nil_ls",
   "eslint",

@@ -32,9 +32,32 @@ end, bundles)
 return {
   cmd = {
     mason .. "/bin/jdtls",
+    -- Heap: 27G total RAM / ~14G free -> 16G leaves headroom so we never swap
+    -- (swapping is what actually causes lag; a bigger heap does not).
+    "-Xms4g",
+    "-Xmx16g",
+    -- GC tuning to keep pauses short on a 24-core box.
+    "-XX:+UseG1GC",
+    "-XX:+UseStringDeduplication",
+    "-XX:GCTimeRatio=4",
+    "-XX:AdaptiveSizePolicyWeight=90",
+    "-Dsun.zip.disableMemoryMapping=true",
   },
 
   init_options = {
     bundles = bundles,
+  },
+
+  settings = {
+    java = {
+      -- jdtls reads a project's .editorconfig automatically and applies it to
+      -- both formatting AND generated code (getters/setters, constructors,
+      -- toString, organize-imports, ...). Generated code is only run through the
+      -- formatter when formatting is enabled, so keep it on. .editorconfig takes
+      -- precedence over the settings below and over java.format.settings.url.
+      format = {
+        enabled = true,
+      },
+    },
   },
 }
