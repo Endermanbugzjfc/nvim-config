@@ -115,7 +115,7 @@ map("n", "_", function()
 end, { desc = "Buffer move backward" })
 
 -- Copy current line to system clipboard
-map("n", "+", 'V"+y', { desc = "Copy current line to system clipboard" })
+map("n", "+", '"+y$', { desc = "Copy until line end to system clipboard" })
 map("v", "+", '"+y', { desc = "Copy selection to system clipboard" })
 
 -- Close other tabs
