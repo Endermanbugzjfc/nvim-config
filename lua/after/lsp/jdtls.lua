@@ -1,4 +1,9 @@
 -- https://poe.com/chat/956upl568lvwke4h4l
+
+if vim.env.NVIM_ENABLE_JDTLS_DEBUGGER ~= "1" then
+  do return end
+end
+
 local mason = vim.fn.stdpath("data") .. "/mason"
 
 local bundles = {}
