@@ -1,7 +1,5 @@
 require("nvchad.configs.lspconfig").defaults()
 
-vim.lsp.config("jdtls", require("after.lsp.jdtls"))
-
 -- tsserver is a Node process; by default it caps its heap fairly low and slows
 -- down on big projects. Give it 8G so it stops thrashing / restarting.
 vim.lsp.config("ts_ls", {
@@ -15,11 +13,16 @@ local servers = {
   "eslint",
 
   "html",
-  "jdtls",
   "cssls",
 
   "ts_ls",
 }
+
+if vim.env.NVIM_ENABLE_JDTLS_DEBUGGER ~= "1" then
+  vim.lsp.config("jdtls", require("after.lsp.jdtls"))
+  servers[#servers + 1] = "jdtls"
+end
+
 vim.lsp.enable(servers)
 
 
