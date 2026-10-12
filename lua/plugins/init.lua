@@ -19,4 +19,24 @@ return {
   },
 
   { "m-demare/attempt.nvim", config = true }, -- Scratch files.
+
+  {
+    "3rd/image.nvim",
+    lazy = false,
+    build = false, -- so that it doesn't build the rock https://github.com/3rd/image.nvim/issues/91#issuecomment-2453430239
+    opts = {
+      backend = "kitty",
+      processor = "magick_cli",
+      integrations = {
+        markdown = { enabled = true },
+      },
+      max_width = nil,
+      max_height = nil,
+      scale_factor = 1.0,
+    },
+    config = function(_, opts)
+      require("image").setup(opts)
+      require("python_images").setup()
+    end,
+  },
 }

@@ -81,3 +81,5 @@ end, {
   nargs = 1,
   desc = "Vimgrep pattern across current filetype",
 })
+
+vim.api.nvim_create_user_command("Img", ":Lazy load image.nvim", {})
