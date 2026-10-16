@@ -43,7 +43,7 @@ return {
     }) -- Key: gS
     require("mini.surround").setup() -- Key: s+prefix
     require("mini.trailspace").setup()
-    require("mini.files").setup { -- Oil.nvim replacement.
+    require("configs.mini_files").setup { -- Oil.nvim replacement.
       options = {
         permanent_delete = false,
       },
