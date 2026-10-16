@@ -128,5 +128,52 @@ assert(confirmations == 4)
 files.close()
 vim.api.nvim_set_current_tabpage(second_tab)
 vim.cmd "tabclose"
+
+-- Revealing the target buffer navigates a hidden session without losing edits.
+local target = root .. "/other.txt"
+vim.fn.writefile({ "target" }, target)
+vim.cmd.edit(vim.fn.fnameescape(target))
+files.open(root .. "/nested")
+local pending_buf = vim.api.nvim_get_current_buf()
+vim.api.nvim_exec_autocmds("TextChanged", { buffer = pending_buf })
+vim.cmd "normal! Gounsaved.txt"
+changed(pending_buf)
+local pending_lines = lines(pending_buf)
+key "q"
+drain()
+require("configs.mini_files").reveal_current_buffer()
+drain()
+assert(files.get_fs_entry().path == target)
+assert(vim.deep_equal(lines(pending_buf), pending_lines))
+assert(confirmations == 4)
+-- Inside mini.files, reveal refers to the file in its target window.
+require("configs.mini_files").reveal_current_buffer()
+assert(files.get_fs_entry().path == target)
+
+-- No repository: leave the explorer untouched and do not notify.
+local notify = vim.notify
+vim.notify = function() error("Git-root navigation must be silent outside a repository") end
+local before_git = files.get_explorer_state()
+require("configs.mini_files").go_to_git_root()
+assert(vim.deep_equal(files.get_explorer_state(), before_git))
+vim.notify = notify
+
+assert(vim.system({ "git", "init", "-q", root }):wait().code == 0)
+files.set_branch({ root .. "/nested" })
+require("configs.mini_files").go_to_git_root()
+assert(files.get_explorer_state().branch[1] == root)
+assert(vim.deep_equal(lines(pending_buf), pending_lines))
+key "q"
+drain()
+require("configs.mini_files").go_to_git_root()
+assert(files.get_explorer_state().branch[1] == root)
+assert(vim.deep_equal(lines(pending_buf), pending_lines))
+assert(confirmations == 4)
+key "<BS>"
+assert(confirmations == 5)
+files.close()
+require("configs.mini_files").go_to_git_root()
+assert(files.get_explorer_state().branch[1] == root)
+files.close()
 vim.fn.delete(root, "rf")
-print "PASS: hide/resume preserves edits, branch, cursor and undo across tabs; discard confirms; synchronization still works"
+print "PASS: hide/resume, reveal and Git-root navigation preserve edits; no-repository navigation is silent; discard and sync work"

@@ -30,6 +30,14 @@ map("n", "<Leader>o", function()
   mini_files.open(vim.api.nvim_buf_get_name(0))
 end, { desc = "Open Mini.Files" })
 
+map("n", ",", function()
+  require("configs.mini_files").reveal_current_buffer()
+end, { desc = "Reveal current buffer in Mini.Files" })
+
+map("n", "<C-,>", function()
+  require("configs.mini_files").go_to_git_root()
+end, { desc = "Go to Git root in Mini.Files" })
+
 local mini_map = require("mini.map")
 map("n", "<leader>l", function()
   mini_map.open()

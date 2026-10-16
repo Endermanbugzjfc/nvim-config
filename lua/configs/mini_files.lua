@@ -15,6 +15,57 @@ M.hide = vim.schedule_wrap(function()
   end
 end)
 
+function M.reveal_current_buffer()
+  local files = require "mini.files"
+  local state = files.get_explorer_state()
+  local win = vim.api.nvim_get_current_win()
+  if state and vim.bo.filetype:match("^minifiles") then
+    win = state.target_window
+  end
+  local path = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+  local stat = vim.uv.fs_stat(path)
+  local directory = path == "" and vim.fn.getcwd() or vim.fs.dirname(path)
+  if stat and stat.type == "directory" then directory = path end
+  if not directory or vim.fn.isdirectory(directory) == 0 then
+    vim.notify("Current buffer has no directory to reveal", vim.log.levels.INFO)
+    return
+  end
+
+  -- Resume first, then navigate the existing explorer so pending edits survive.
+  if hidden[vim.api.nvim_get_current_tabpage()] or not state then files.open(directory) end
+  files.set_target_window(win)
+  local branch = { directory }
+  if stat and stat.type == "file" then table.insert(branch, path) end
+  files.set_branch(branch, { depth_focus = 1 })
+end
+
+function M.go_to_git_root()
+  local files = require "mini.files"
+  local state = files.get_explorer_state()
+  local win = vim.api.nvim_get_current_win()
+  local directory
+  if state and vim.bo.filetype:match("^minifiles") then
+    directory = state.branch[state.depth_focus]
+    win = state.target_window
+  else
+    local path = vim.api.nvim_buf_get_name(0)
+    local stat = vim.uv.fs_stat(path)
+    directory = path == "" and vim.fn.getcwd() or vim.fs.dirname(path)
+    if stat and stat.type == "directory" then directory = path end
+  end
+  if not directory then return end
+
+  local ok, process = pcall(vim.system, { "git", "-C", directory, "rev-parse", "--show-toplevel" }, { text = true })
+  if not ok then return end
+  local result = process:wait()
+  if result.code ~= 0 then return end
+  local root = result.stdout:gsub("\r?\n$", "")
+
+  if hidden[vim.api.nvim_get_current_tabpage()] or not state then files.open(root) end
+  files.set_target_window(win)
+  files.set_branch({ root }, { depth_focus = 1 })
+end
+
 function M.setup(opts)
   local files = require "mini.files"
   local open, close, refresh = files.open, files.close, files.refresh
