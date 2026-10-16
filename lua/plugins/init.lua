@@ -35,7 +35,17 @@ return {
       scale_factor = 1.0,
     },
     config = function(_, opts)
-      require("image").setup(opts)
+      local image = require "image"
+      local hijack_buffer = image.hijack_buffer
+      image.hijack_buffer = function(path, ...)
+        -- mini.files previews have image extensions but are virtual buffers,
+        -- including previews of names that have not been created on disk yet.
+        if vim.startswith(path, "minifiles://") then
+          return
+        end
+        return hijack_buffer(path, ...)
+      end
+      image.setup(opts)
       require("python_images").setup()
     end,
   },
