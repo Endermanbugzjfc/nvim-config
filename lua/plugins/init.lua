@@ -49,4 +49,18 @@ return {
       require("python_images").setup()
     end,
   },
+
+  {
+    "SCJangra/table-nvim",
+    ft = 'markdown',
+    opts = {
+      padd_column_separators = true,
+      mappings = {
+        next = '<TAB>',        -- Move to next cell
+        prev = '<S-TAB>',      -- Move to previous cell
+        insert_row_down = '<A-j>', -- Insert row below
+        move_column_right = '<A-S-l>', -- Swap column layout right
+      }
+  },
+}
 }
