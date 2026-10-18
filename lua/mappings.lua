@@ -249,6 +249,16 @@ map("n", "<leader>dr", dap.repl.open, { desc = "DAP REPL" })
 map("n", "<leader>du", dapui.toggle, { desc = "DAP UI Toggle" })
 map("n", "<leader>dt", dap.terminate, { desc = "DAP Terminate" })
 
+map("n", "/", "/<Up>", { desc = "Incr search (input preserved)" })
+map("n", "?", "/<Up>", { desc = "Rev incr search (input preserved)" })
+map("c", "<C-c>", function()
+  local cmdtype = vim.fn.getcmdtype()
+  if cmdtype == "/" or cmdtype == "?" then
+    return "<C-e><C-u>"
+  end
+  return "<C-c>"
+end, { expr = true, desc = "Clear search input" })
+
 -- TODO:
 -- nvim kill a dangling doc window
 -- :lua for _, win in ipairs(vim.api.nvim_list_wins()) do if vim.api.nvim_win_get_config(win).relative ~= "" then vim.api.nvim_win_close(win, true) end end
