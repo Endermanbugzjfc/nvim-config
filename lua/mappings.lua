@@ -266,6 +266,8 @@ end, { expr = true, desc = "Clear search input" })
 -- }}}
 
 -- {{{ WORKAROUNDS
+map("x", "p", "P", { desc = "Paste without yanking replaced text" })
+
 map("v", ">", ">gv", { desc = "indent increase (improved)"})
 map("v", "<", "<gv", { desc = "indent decrease (improved)"})
 
