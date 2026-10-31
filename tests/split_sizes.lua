@@ -77,4 +77,50 @@ eq(vim.api.nvim_buf_get_name(0), file, 'file argument is preserved')
 eq(vim.api.nvim_win_get_cursor(0)[1], 2, '+command is preserved')
 command('close')
 
-print('PASS: split size memory, modifiers, explicit counts, terminal/floating changes, file arguments')
+-- A moved pane keeps its dimension, and changes orientation using size memory.
+command('split')
+local moved = vim.api.nvim_get_current_win()
+command('wincmd J')
+eq(vim.api.nvim_get_current_win(), moved, 'moving preserves the active pane')
+eq(vim.api.nvim_win_get_height(0), 8, 'moving to the bottom preserves height')
+command('wincmd K')
+eq(vim.api.nvim_win_get_height(0), 8, 'moving to the top preserves height')
+command('wincmd L')
+eq(vim.api.nvim_win_get_width(0), 31, 'changing to vertical uses remembered width')
+command('wincmd H')
+eq(vim.api.nvim_win_get_width(0), 31, 'moving to the left preserves width')
+command('wincmd H')
+eq(vim.api.nvim_win_get_width(0), 31, 'moving to the same edge preserves width')
+vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-w>L', true, false, true), 'xt', false)
+resized()
+eq(vim.api.nvim_win_get_width(0), 31, 'normal-mode pane movement preserves width')
+command('wincmd J')
+eq(vim.api.nvim_win_get_height(0), 8, 'changing to horizontal uses remembered height')
+command('close')
+
+-- Peer panes should retain their own sizes during rotations and exchanges.
+command('vsplit')
+command('vsplit')
+vim.cmd('vertical resize 23')
+resized()
+local widths = {}
+for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+  widths[win] = vim.api.nvim_win_get_width(win)
+end
+local function check_widths(message)
+  for win, width in pairs(widths) do
+    eq(vim.api.nvim_win_get_width(win), width, message .. ' (pane ' .. win .. ')')
+  end
+end
+command('wincmd r')
+check_widths('rotation preserves every pane width')
+command('wincmd x')
+check_widths('exchange preserves every pane width')
+command('wincmd L')
+check_widths('moving a pane preserves peer widths')
+command('only')
+command('vsplit')
+eq(vim.api.nvim_win_get_width(0), 23, 'rearrangements do not overwrite size memory')
+command('close')
+
+print('PASS: split size memory, pane moves, rotations, exchanges, explicit counts, terminal/floating changes, file arguments')
