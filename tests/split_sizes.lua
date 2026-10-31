@@ -123,4 +123,64 @@ command('vsplit')
 eq(vim.api.nvim_win_get_width(0), 23, 'rearrangements do not overwrite size memory')
 command('close')
 
-print('PASS: split size memory, pane moves, rotations, exchanges, explicit counts, terminal/floating changes, file arguments')
+local function pane_state()
+  local state = { layout = vim.fn.winlayout(), active = vim.api.nvim_get_current_win(), windows = {} }
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    state.windows[win] = {
+      width = vim.api.nvim_win_get_width(win),
+      height = vim.api.nvim_win_get_height(win),
+      buffer = vim.api.nvim_win_get_buf(win),
+    }
+  end
+  return state
+end
+
+local function same_state(expected, message)
+  local actual = pane_state()
+  assert(vim.deep_equal(actual, expected), message .. '\nexpected: ' .. vim.inspect(expected)
+    .. '\nactual: ' .. vim.inspect(actual))
+end
+
+-- Rebuild a mixed, nested layout without replacing panes or modified buffers.
+command('vsplit')
+command('split')
+command('vsplit')
+command('split')
+for index, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+  local buffer = vim.api.nvim_create_buf(true, false)
+  vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { 'unsaved pane ' .. index })
+  vim.api.nvim_win_set_buf(win, buffer)
+end
+resized()
+local original = pane_state()
+command('wincmd H')
+assert(not vim.deep_equal(vim.fn.winlayout(), original.layout), 'test move changes layout')
+command('UndoPaneArrangement')
+same_state(original, 'undo restores nested layout, dimensions, focus and buffer IDs')
+for _, pane in pairs(original.windows) do
+  assert(vim.bo[pane.buffer].modified, 'undo preserves unsaved buffers')
+end
+
+-- Only the latest rearrangement is available, and undo does not become redo.
+command('wincmd L')
+local penultimate = pane_state()
+command('wincmd J')
+command('UndoPaneArrangement')
+same_state(penultimate, 'undo returns to the arrangement before the latest move')
+local notify = vim.notify
+local notices = {}
+vim.notify = function(message) table.insert(notices, message) end
+command('UndoPaneArrangement')
+same_state(penultimate, 'second undo does not toggle or traverse history')
+eq(notices[#notices], 'No pane arrangement to undo', 'one-level undo is consumed')
+
+-- Refuse an incompatible snapshot without changing the remaining panes.
+command('wincmd K')
+command('vsplit')
+local added = pane_state()
+command('UndoPaneArrangement')
+same_state(added, 'undo leaves newly opened panes intact')
+eq(notices[#notices], 'Cannot undo pane arrangement after panes were opened or closed', 'changed pane set is rejected')
+vim.notify = notify
+
+print('PASS: split size memory, pane moves, rotations, exchanges, one-level arrangement undo, modified buffers, terminal/floating changes')

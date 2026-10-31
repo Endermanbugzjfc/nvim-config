@@ -4,6 +4,8 @@ function M.setup()
   local sizes = {}
   local previous
   local rearrangement
+  local last_arrangement
+  local restoring = false
 
   local function snapshot()
     local windows = {}
@@ -33,6 +35,9 @@ function M.setup()
       layout = layout,
       columns = vim.o.columns,
       lines = vim.o.lines,
+      tab = vim.api.nvim_get_current_tabpage(),
+      active = vim.api.nvim_get_current_win(),
+      restore_sizes = vim.fn.winrestcmd(),
     }
   end
 
@@ -43,6 +48,7 @@ function M.setup()
     callback = function() previous = snapshot() end,
   })
   local function resized()
+    if restoring then return end
     if rearrangement then previous = rearrangement end
     local current = snapshot()
     local win = vim.api.nvim_get_current_win()
@@ -57,6 +63,7 @@ function M.setup()
       if not previous.windows[id] then same_windows = false end
     end
     if same_screen and same_windows and (rearrangement or not same_layout) then
+      if not same_layout then last_arrangement = previous end
       -- Window IDs follow their panes through moves, exchanges and rotations.
       -- Restore peers first so the active pane has priority if space is tight.
       local order = vim.tbl_keys(current.windows)
@@ -110,6 +117,85 @@ function M.setup()
       if rearrangement == saved then resized() end
     end)
   end
+
+  local function restore_layout(layout)
+    local function first_leaf(node)
+      if node[1] == 'leaf' then return node[2] end
+      return first_leaf(node[2][1])
+    end
+    local leaves = {}
+    local function collect(node)
+      if node[1] == 'leaf' then
+        table.insert(leaves, node[2])
+      else
+        for _, child in ipairs(node[2]) do collect(child) end
+      end
+    end
+    collect(layout)
+    -- Start with a flat row, then rebuild each saved row/column using existing IDs.
+    for _, win in ipairs(leaves) do
+      vim.api.nvim_set_current_win(win)
+      vim.cmd('noautocmd wincmd L')
+    end
+    local function build(node)
+      if node[1] == 'leaf' then return end
+      for index = 2, #node[2] do
+        local result = vim.fn.win_splitmove(first_leaf(node[2][index]), first_leaf(node[2][index - 1]), {
+          vertical = node[1] == 'row',
+          rightbelow = true,
+        })
+        assert(result == 0, 'Could not restore pane arrangement')
+      end
+      for _, child in ipairs(node[2]) do build(child) end
+    end
+    build(layout)
+  end
+
+  vim.api.nvim_create_user_command('UndoPaneArrangement', function()
+    -- Finish a command-line move if its scheduled size restoration is pending.
+    if rearrangement then resized() end
+    local saved = last_arrangement
+    if not saved or not vim.api.nvim_tabpage_is_valid(saved.tab) then
+      vim.notify('No pane arrangement to undo', vim.log.levels.INFO)
+      return
+    end
+    local windows = {}
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(saved.tab)) do
+      if vim.api.nvim_win_get_config(win).relative == '' then windows[win] = true end
+    end
+    local same_windows = vim.tbl_count(windows) == vim.tbl_count(saved.windows)
+    for win in pairs(saved.windows) do
+      if not windows[win] then same_windows = false end
+    end
+    if not same_windows then
+      vim.notify('Cannot undo pane arrangement after panes were opened or closed', vim.log.levels.WARN)
+      return
+    end
+    restoring = true
+    local ok, err = pcall(function()
+      vim.api.nvim_set_current_tabpage(saved.tab)
+      restore_layout(saved.layout)
+      vim.api.nvim_set_current_win(saved.active)
+      -- Resizing an outer frame can disturb inner frames restored earlier.
+      for _ = 1, vim.tbl_count(saved.windows) do
+        vim.cmd(saved.restore_sizes)
+        local matched = true
+        for win, size in pairs(saved.windows) do
+          if vim.api.nvim_win_get_height(win) ~= size.height
+            or vim.api.nvim_win_get_width(win) ~= size.width then matched = false end
+        end
+        if matched then break end
+      end
+    end)
+    restoring = false
+    previous = snapshot()
+    if ok then
+      last_arrangement = nil
+    else
+      vim.notify('Could not undo pane arrangement: ' .. tostring(err), vim.log.levels.ERROR)
+    end
+  end, { desc = 'Undo the last pane rearrangement (one level)' })
+
   for _, direction in ipairs({ 'H', 'J', 'K', 'L', 'r', 'R', 'x' }) do
     vim.keymap.set('n', '<C-w>' .. direction, function()
       local count = vim.v.count > 0 and tostring(vim.v.count) or ''
