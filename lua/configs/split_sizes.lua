@@ -6,6 +6,7 @@ function M.setup()
   local rearrangement
   local last_arrangement
   local restoring = false
+  local closing
 
   local function snapshot()
     local windows = {}
@@ -47,20 +48,103 @@ function M.setup()
     group = group,
     callback = function() previous = snapshot() end,
   })
+
+  local function resize_after_close(saved, current)
+    local grow = {}
+    local alive = {}
+    local function extent(node, dimension)
+      if node[1] == 'leaf' then return saved.windows[node[2]][dimension] end
+      local total = 0
+      local along_axis = node[1] == (dimension == 'width' and 'row' or 'col')
+      for _, child in ipairs(node[2]) do
+        local size = extent(child, dimension)
+        total = along_axis and (total + size + 1) or math.max(total, size)
+      end
+      return along_axis and total - 1 or total
+    end
+    local function allow_growth(node, dimension)
+      if not alive[node] then return end
+      if node[1] == 'leaf' then
+        grow[node[2]] = grow[node[2]] or {}
+        grow[node[2]][dimension] = true
+      elseif node[1] == (dimension == 'width' and 'row' or 'col') then
+        local largest
+        for _, child in ipairs(node[2]) do
+          if alive[child] and (not largest or extent(child, dimension) > extent(largest, dimension)) then
+            largest = child
+          end
+        end
+        if largest then allow_growth(largest, dimension) end
+      else
+        for _, child in ipairs(node[2]) do allow_growth(child, dimension) end
+      end
+    end
+    local function surviving(node)
+      if node[1] == 'leaf' then
+        alive[node] = current.windows[node[2]] ~= nil
+        return alive[node]
+      end
+      local remaining = {}
+      for _, child in ipairs(node[2]) do
+        if surviving(child) then table.insert(remaining, child) end
+      end
+      alive[node] = #remaining > 0
+      if #remaining > 0 and #remaining < #node[2] then
+        local dimension = node[1] == 'row' and 'width' or 'height'
+        local largest = remaining[1]
+        for index = 2, #remaining do
+          if extent(remaining[index], dimension) > extent(largest, dimension) then
+            largest = remaining[index]
+          end
+        end
+        allow_growth(largest, dimension)
+      end
+      return #remaining > 0
+    end
+    surviving(saved.layout)
+    -- Leave the chosen branch free to absorb space, restoring everyone else.
+    for _ = 1, vim.tbl_count(current.windows) do
+      local matched = true
+      for win, pane in pairs(current.windows) do
+        for _, dimension in ipairs({ 'height', 'width' }) do
+          if pane.constrained[dimension] and not (grow[win] and grow[win][dimension]) then
+            local wanted = saved.windows[win][dimension]
+            local get = dimension == 'height' and vim.api.nvim_win_get_height or vim.api.nvim_win_get_width
+            local set = dimension == 'height' and vim.api.nvim_win_set_height or vim.api.nvim_win_set_width
+            if get(win) ~= wanted then
+              set(win, wanted)
+              matched = false
+            end
+          end
+        end
+      end
+      if matched then break end
+    end
+  end
+
   local function resized()
     if restoring then return end
     if rearrangement then previous = rearrangement end
+    if closing then previous = closing end
     local current = snapshot()
     local win = vim.api.nvim_get_current_win()
     local before, after = previous.windows[win], current.windows[win]
     local same_screen = previous.columns == current.columns and previous.lines == current.lines
     local same_layout = vim.deep_equal(previous.layout, current.layout)
     local same_windows = true
+    local only_removed = true
     for id in pairs(previous.windows) do
       if not current.windows[id] then same_windows = false end
     end
     for id in pairs(current.windows) do
-      if not previous.windows[id] then same_windows = false end
+      if not previous.windows[id] then
+        same_windows = false
+        only_removed = false
+      end
+    end
+    if same_screen and previous.tab == current.tab and only_removed and not same_windows then
+      resize_after_close(previous, current)
+      current = snapshot()
     end
     if same_screen and same_windows and (rearrangement or not same_layout) then
       if not same_layout then last_arrangement = previous end
@@ -103,10 +187,23 @@ function M.setup()
     end
     previous = current
     rearrangement = nil
+    closing = nil
   end
   vim.api.nvim_create_autocmd('WinResized', {
     group = group,
     callback = resized,
+  })
+  vim.api.nvim_create_autocmd('WinClosed', {
+    group = group,
+    callback = function(event)
+      if restoring then return end
+      local saved = closing or snapshot()
+      if not saved.windows[tonumber(event.match)] then return end
+      closing = saved
+      vim.schedule(function()
+        if closing == saved then resized() end
+      end)
+    end,
   })
 
   local function before_rearrangement()
