@@ -100,12 +100,69 @@ function M.setup(opts)
   end
 
   local group = vim.api.nvim_create_augroup("MiniFilesHide", { clear = true })
+  local cwd_namespace = vim.api.nvim_create_namespace("MiniFilesCwdBorder")
+  local border_namespaces = {}
+  local function set_cwd_highlights()
+    for _, name in ipairs({ "FloatBorder", "MiniFilesBorder", "MiniFilesBorderModified" }) do
+      vim.api.nvim_set_hl(cwd_namespace, name, { fg = "#ff5555" })
+    end
+  end
+  local function canonical(path)
+    return vim.uv.fs_realpath(path) or vim.fs.normalize(path)
+  end
+  local function update_cwd_borders()
+    local state = files.get_explorer_state()
+    if not state then return end
+    local cwd = canonical(vim.fn.getcwd())
+    for _, window in ipairs(state.windows) do
+      local win = window.win_id
+      if vim.api.nvim_win_is_valid(win) then
+        if window.path and canonical(window.path) == cwd then
+          if border_namespaces[win] == nil then
+            border_namespaces[win] = vim.api.nvim_get_hl_ns({ winid = win })
+          end
+          vim.api.nvim_win_set_hl_ns(win, cwd_namespace)
+        elseif border_namespaces[win] ~= nil then
+          vim.api.nvim_win_set_hl_ns(win, border_namespaces[win])
+          border_namespaces[win] = nil
+        end
+      end
+    end
+  end
+  set_cwd_highlights()
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "MiniFilesWindowUpdate",
+    callback = update_cwd_borders,
+  })
+  vim.api.nvim_create_autocmd("DirChanged", {
+    group = group,
+    callback = update_cwd_borders,
+  })
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    group = group,
+    callback = function()
+      set_cwd_highlights()
+      update_cwd_borders()
+    end,
+  })
+  vim.api.nvim_create_autocmd("WinClosed", {
+    group = group,
+    callback = function(event) border_namespaces[tonumber(event.match)] = nil end,
+  })
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "MiniFilesBufferCreate",
     callback = function(event)
       local buf = event.data.buf_id
       vim.keymap.set("n", "q", M.hide, { buffer = buf, desc = "Hide explorer" })
+      vim.keymap.set("n", "<Del>", function()
+        local state = files.get_explorer_state()
+        local directory = state and state.branch[state.depth_focus]
+        if not directory or vim.fn.isdirectory(directory) == 0 then return end
+        vim.api.nvim_set_current_dir(directory)
+        update_cwd_borders()
+      end, { buffer = buf, desc = "Set cwd to focused directory" })
       vim.keymap.set("n", "<BS>", function()
         -- A forced refresh asks about pending actions before discarding them.
         files.refresh { content = { filter = files.config.content.filter } }
