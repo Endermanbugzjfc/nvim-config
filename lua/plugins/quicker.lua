@@ -7,13 +7,14 @@ return {
         enabled = true,
         autosave = "unmodified", -- auto-write files that had no unsaved changes
       },
+      -- Set options explicitly so quicker does not reapply its default nowrap.
+      use_default_opts = false,
       opts = {
         buflisted = false,
         number = false,
         relativenumber = false,
         signcolumn = "auto",
         winfixheight = true,
-        wrap = false,
       },
     },
     keys = {
