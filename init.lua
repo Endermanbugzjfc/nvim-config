@@ -34,4 +34,8 @@ require "nvchad.autocmds"
 
 vim.schedule(function()
   require "mappings"
+  require "custom_commands"
+  require "chadrc2"
+
+  require('configs.split_sizes').setup()
 end)
