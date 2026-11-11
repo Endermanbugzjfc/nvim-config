@@ -51,6 +51,8 @@ end)
 
 -- {{{ FEATURES
 
+require("configs.paste").setup()
+
 map("n", "<leader>fr", ":Telescope resume<CR>", { desc = "Resume last Telescope picker" })
 -- map("n", "gr", ":Telescope lsp_references<CR>", { desc = "LSP references" })
 map("n", "gd", ":Telescope lsp_definitions<CR>", { desc = "LSP definitions" })
