@@ -32,7 +32,7 @@ function M.setup()
   end
 
   local group = api.nvim_create_augroup("TemporaryTabs", { clear = true })
-  local prefix, count
+  local insert_prefix
   local function mark(buf)
     if vim.bo[buf].buftype == "" and vim.bo[buf].buflisted and vim.b[buf].temporary_tab == nil then
       vim.b[buf].temporary_tab = not vim.bo[buf].modified
@@ -53,7 +53,7 @@ function M.setup()
     end,
   })
   local function entered(event)
-    prefix, count = nil, nil
+    insert_prefix = nil
     local buf = event.buf
     if vim.bo[buf].buftype ~= "" then return end
     mark(buf)
@@ -70,7 +70,7 @@ function M.setup()
   api.nvim_create_autocmd("BufEnter", { group = group, callback = entered })
   api.nvim_create_autocmd("WinEnter", {
     group = group,
-    callback = function() prefix, count = nil, nil end,
+    callback = function() insert_prefix = nil end,
   })
 
   api.nvim_create_autocmd({ "BufLeave", "WinLeave" }, {
@@ -117,83 +117,35 @@ function M.setup()
     end,
   })
 
-  local motions = {}
-  for char in ("h j k l w W b B e E 0 ^ $ _ + - G H M L % { } ( ) | ; , n N * # <Space> <BS> <CR> "
-    .. "<Left> <Right> <Up> <Down> <Home> <End> <S-Left> <S-Right> <S-Up> <S-Down> "
-    .. "<C-Left> <C-Right> <C-Home> <C-End> <C-B> <C-F> <C-D> <C-U> <C-E> <C-Y> "
-    .. "<PageUp> <PageDown> <C-O> <C-I> <C-]> <C-T>"):gmatch("%S+") do
-    motions[char] = true
-  end
-  local prefixed = {
-    g = "gjk0^$_eEGHMm;,dDfF*#nNvV",
-    ["["] = "[]{}()mMdDcCfF/`'sz",
-    ["]"] = "[]{}()mMdDcCfF/`'sz",
-    z = "t.zb^-+HhLl",
-  }
-  vim.on_key(function(key, typed)
+  -- 'readonly' buffers still emit InsertEnter. 'nomodifiable' buffers reject
+  -- insertion before that event, so recognize their insert commands directly.
+  vim.on_key(function(key)
     local buf = api.nvim_get_current_buf()
     local mode = api.nvim_get_mode().mode
-    if not M.is_temporary(buf) or not (mode:match("^n") or mode:match("^[vV\22]")) then
-      prefix, count = nil, nil
+    if not M.is_temporary(buf) or vim.bo[buf].modifiable or not (mode == "n" or mode:match("^[vV\22]")) then
+      insert_prefix = nil
       return
     end
-
-    -- Plugins use :normal! to restore views while opening files/explorers.
-    -- Only accept non-typed keys when continuing a user motion or a macro.
-    if typed == "" and not prefix and not count and vim.fn.reg_executing() == "" then return end
-
     local char = vim.fn.keytrans(key)
-    if prefix then
-      local previous = prefix
-      prefix, count = nil, nil
-      if previous == "g" and (char == "'" or char == "`") then
-        prefix = "argument"
-        return
-      end
-      if char ~= "<Esc>" and (previous == "argument"
-        or (prefixed[previous] and #char == 1 and prefixed[previous]:find(char, 1, true))
-        or (previous == "g" and (char == "<Home>" or char == "<End>" or char == "<C-]>"))
-        or (previous == "z" and char == "<CR>")) then
-        M.keep(buf)
-      end
+    if insert_prefix then
+      local previous = insert_prefix
+      insert_prefix = nil
+      if previous == "g" and mode == "n" and char:match("^[iIR]$") then M.keep(buf) end
+      if previous == "g" and char:match("^['`r]$") then insert_prefix = "argument" end
+      if previous == "window" and char:match("^%d$") then insert_prefix = "window" end
       return
     end
-    if char:match("^[1-9]$") or (count and char == "0") then
-      count = true
-      return
-    end
-    count = nil
-    if prefixed[char] then
-      prefix = char
-    elseif char:match("^[fFtT'`]$") then
-      prefix = "argument"
-    elseif char == "<C-W>" or char == '"' or char:match("^[mq@r]$") then
-      prefix = "ignore"
-    elseif motions[char] then
+    if char == "g" then
+      insert_prefix = "g"
+    elseif char == "<C-W>" then
+      insert_prefix = "window"
+    elseif char:match("^[fFtT'`\"mr@%[%]z]$") or (char == "q" and vim.fn.reg_recording() == "") then
+      -- These commands read an argument; e.g. fi and 'i do not insert text.
+      insert_prefix = "argument"
+    elseif char:match(mode == "n" and "^[iIaAoOsScCR]$" or "^[IAsScCR]$") or char == "<Insert>" then
       M.keep(buf)
-    elseif char == "/" or char == "?" then
-      -- Wait for CmdlineLeave so a cancelled incremental search stays temporary.
-      return
-    else
-      -- Also recognize cursor motion implemented by a Lua mapping. Compare the
-      -- same window and buffer, so a picker or tab switch cannot keep a preview.
-      local win, cursor = api.nvim_get_current_win(), api.nvim_win_get_cursor(0)
-      vim.schedule(function()
-        if api.nvim_win_is_valid(win) and api.nvim_get_current_win() == win
-          and api.nvim_get_current_buf() == buf and not vim.deep_equal(api.nvim_win_get_cursor(win), cursor) then
-          M.keep(buf)
-        end
-      end)
     end
-  end, api.nvim_create_namespace("TemporaryTabMotions"))
-
-  api.nvim_create_autocmd("CmdlineLeave", {
-    group = group,
-    callback = function()
-      local kind = vim.fn.getcmdtype()
-      if (kind == "/" or kind == "?") and not vim.v.event.abort then M.keep(api.nvim_get_current_buf()) end
-    end,
-  })
+  end, api.nvim_create_namespace("TemporaryTabInsertAttempts"))
   for _, buf in ipairs(api.nvim_list_bufs()) do
     mark(buf)
   end

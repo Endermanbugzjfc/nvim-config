@@ -1,8 +1,10 @@
 **This repo is supposed to used as config by NvChad users!**
 
 Newly opened buffer tabs are temporary and shown in italics. They hide when focus
-moves away; a Vim motion or edit keeps the tab permanently. Hidden buffers remain
-available through the jumplist or `:buffer` and become temporary when reopened.
+moves away; entering Insert mode (including an attempt in a read-only buffer) or
+editing keeps the tab permanently. Motions and searches leave it temporary. Hidden
+buffers remain available through the jumplist or `:buffer` and become temporary
+when reopened.
 
 - The main nvchad repo (NvChad/NvChad) is used as a plugin by this repo.
 - So you just import its modules , like `require "nvchad.options" , require "nvchad.mappings"`

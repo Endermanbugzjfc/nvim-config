@@ -53,14 +53,16 @@ vim.api.nvim_exec_autocmds("CursorMoved", {})
 vim.cmd "normal! j"
 assert(tabs.is_temporary(first))
 keys("j")
-assert(not tabs.is_temporary(first), "motion should keep a tab")
+assert(tabs.is_temporary(first), "motion should leave a tab temporary")
+keys("i<Esc>")
+assert(not tabs.is_temporary(first), "entering Insert mode should keep a tab even without edits")
 assert(not render():find("TemporaryTabTbBufOn", 1, true), "kept tabs should stop being italic")
 open()
 assert(visible(first), "kept tab should survive focus loss")
 
 -- Explicitly hiding a kept tab resets it for its next appearance.
 local reopened, reopened_path = open()
-keys("w")
+keys("i<Esc>")
 assert(not tabs.is_temporary(reopened))
 open()
 vim.bo[reopened].buflisted = false
@@ -74,28 +76,30 @@ vim.cmd.edit(reopened_path)
 drain()
 assert(visible(reopened) and tabs.is_temporary(reopened), ":edit should also reopen hidden buffers as temporary")
 keys("w")
-assert(not tabs.is_temporary(reopened), "a motion should keep the reopened buffer")
+assert(tabs.is_temporary(reopened), "a motion should leave the reopened buffer temporary")
+keys("i<Esc>")
+assert(not tabs.is_temporary(reopened), "entering Insert mode should keep the reopened buffer")
 
 -- Include motions at boundaries, counts, prefixes, and mapped motions.
 for _, motion in ipairs({ "h", "0", "10j", "gg", "ge", "fZ", "[m", "<Down>", "<C-D>", "yw" }) do
   local buf = open()
   keys(motion)
-  assert(not tabs.is_temporary(buf), "motion did not keep tab: " .. motion)
+  assert(tabs.is_temporary(buf), "motion should leave tab temporary: " .. motion)
 end
 for _, motion in ipairs({ "w", "gg", "10j" }) do
   vim.keymap.set("n", "Q", motion)
   local mapped = open()
   keys("Q")
-  assert(not tabs.is_temporary(mapped), "remapped motion should keep tab: " .. motion)
+  assert(tabs.is_temporary(mapped), "remapped motion should leave tab temporary: " .. motion)
 end
 vim.keymap.set("n", "X", function() vim.api.nvim_win_set_cursor(0, { 2, 0 }) end)
 local lua_motion = open()
 keys("X")
-assert(not tabs.is_temporary(lua_motion), "Lua cursor mapping should keep tab")
+assert(tabs.is_temporary(lua_motion), "Lua cursor mapping should leave tab temporary")
 
 local searching = open()
 keys("/beta<CR>")
-assert(not tabs.is_temporary(searching), "search motion should keep tab")
+assert(tabs.is_temporary(searching), "search motion should leave tab temporary")
 local cancelled = open()
 keys("/beta<Esc>")
 assert(tabs.is_temporary(cancelled), "cancelled search should remain temporary")
@@ -121,6 +125,33 @@ keys("<C-w>w")
 assert(tabs.is_temporary(split) and not visible(split), "window motion should hide the departing preview")
 vim.cmd "only"
 drain()
+
+for _, option in ipairs({ "modifiable", "readonly", "nomodifiable" }) do
+  for _, command in ipairs({ "i", "a", "I", "A", "o", "O", "s", "S", "C", "cw", "R", "gI", "gi", "gR", "2i", '"ai', "<Insert>" }) do
+    local buf = open()
+    vim.bo[buf].readonly = option == "readonly"
+    vim.bo[buf].modifiable = option ~= "nomodifiable"
+    keys(command .. "<Esc>")
+    assert(not tabs.is_temporary(buf), option .. " insert attempt should keep tab: " .. command)
+  end
+end
+for _, command in ipairs({ "fi", "ti", "mi", "'i", "`i", "g'i", "g`i", "[i", "]i", "zi", "<C-w>i", "/alpha<CR>", "yiw", "viw", "vfi" }) do
+  local buf = open()
+  vim.bo[buf].modifiable = false
+  keys(command .. "<Esc>")
+  assert(tabs.is_temporary(buf), "non-insert command should leave an unmodifiable buffer temporary: " .. command)
+end
+for _, command in ipairs({ "vc", "vC", "vs", "vS", "vR", "<C-v>jI", "<C-v>jA" }) do
+  local buf = open()
+  vim.bo[buf].modifiable = false
+  keys(command .. "<Esc>")
+  assert(not tabs.is_temporary(buf), "visual insert attempt should keep an unmodifiable buffer: " .. command)
+end
+vim.keymap.set("n", "Q", "i")
+local mapped_insert = open()
+vim.bo[mapped_insert].modifiable = false
+keys("Q<Esc>")
+assert(not tabs.is_temporary(mapped_insert), "mapped insert attempt should keep an unmodifiable buffer")
 
 local edited = open()
 keys("iCHANGED<Esc>")
@@ -154,4 +185,4 @@ render()
 local highlight = vim.api.nvim_get_hl(0, { name = "TemporaryTabTbBufOn" })
 assert(highlight.italic and highlight.fg == 0x123456 and highlight.bg == 0xabcdef)
 vim.fn.delete(root, "rf")
-print "PASS: temporary tabs, italics, hiding/reopening, motions, edits, splits, and NvChad integration"
+print "PASS: temporary tabs, Insert mode and blocked attempts, browsing, hiding/reopening, splits, and NvChad integration"
