@@ -99,11 +99,13 @@ function M.setup()
   })
 
   -- NvChad's BufAdd handler indexes the first entry without checking for an
-  -- empty list. Refill it before BufAdd when every preview has been hidden.
+  -- empty list. Refill it for listed file buffers, not transient picker buffers.
   api.nvim_create_autocmd("BufNew", {
     group = group,
     callback = function(event)
-      if vim.t.bufs and #vim.t.bufs == 0 then vim.t.bufs = { event.buf } end
+      if vim.t.bufs and #vim.t.bufs == 0 and vim.bo[event.buf].buflisted and vim.bo[event.buf].buftype == "" then
+        vim.t.bufs = { event.buf }
+      end
     end,
   })
   api.nvim_create_autocmd({ "InsertEnter", "TextChanged", "TextChangedI", "BufWritePost" }, {
