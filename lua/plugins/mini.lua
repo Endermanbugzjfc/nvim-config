@@ -33,6 +33,7 @@ return {
     }
     map.open()
 
+    require("mini.align").setup() -- Keys: ga, gA
     require("configs.mini_splitjoin").setup() -- Key: gS
     require("mini.surround").setup() -- Key: s+prefix
     require("mini.trailspace").setup()
