@@ -47,6 +47,13 @@ map("n", "<leader>L", function()
   mini_map.close()
 end)
 
+map({"n", "v"}, "<leader>gs", ":Gitsigns<CR>", { desc = "Gitsigns menu" })
+map({"n", "v"}, "<leader>gb", ":Gitsigns blame_line<CR>", { desc = "Gitsigns blame line" })
+map({"n", "v"}, "<leader>gB", ":Gitsigns blame<CR>", { desc = "Gitsigns blame" })
+map({"n", "v"}, "<leader>gq", ":Gitsigns setqflist<CR>", { desc = "Gitsigns set qflist/loclist" })
+map({"n", "v"}, "<leader>gx", ":Gitsigns reset_hunk<CR>", { desc = "Gitsigns reset hunk/lines" })
+map({"n", "v"}, "<leader>gp", ":Gitsigns preview_hunk<CR>", { desc = "Gitsigns preview hunk/lines" })
+
 -- }}}
 
 -- {{{ FEATURES
