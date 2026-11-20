@@ -31,6 +31,8 @@ require("configs.temporary_tabs").setup()
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
+require("configs.recording_cursor").setup()
+
 require "options"
 require "nvchad.autocmds"
 
