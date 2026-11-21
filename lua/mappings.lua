@@ -1,6 +1,8 @@
 require "nvchad.mappings"
 local map = vim.keymap.set
 
+require("configs.visual_navigation").setup()
+
 -- {{{ PLUGINS
 
 -- https://github.com/m-demare/attempt.nvim/#keymaps
